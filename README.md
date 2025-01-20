@@ -1,6 +1,12 @@
 # GatorNest: A Hostel Management System for the University of Florida
 
 ## Team Members
+### Frontend Team
+- **Pranaya Yadav Palleboyina**  
+  **UFID:** 11602431
+
+- **Sai Pande**  
+  **UFID:** 37696687
 
 ### Backend Team
 - **Sri Meghana Vaishnapu**  
@@ -9,12 +15,7 @@
 - **Yaswanth Attaluri**  
   **UFID:** 10136560
 
-### Frontend Team
-- **Pranaya Yadav Palleboyina**  
-  **UFID:** 11602431
 
-- **Sai Pande**  
-  **UFID:** 37696687
 
 ---
 
