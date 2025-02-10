@@ -27,28 +27,28 @@ GatorNest is a comprehensive hostel management system designed specifically for 
 
 ---
 
-## 🚀 Features
+## Features
 
-### 🏠 Room Allocation and Management
+### Room Allocation and Management
 - Effortlessly manage room assignments based on availability and student preferences.
 - Real-time tracking of room occupancy and vacancy.
 
-### 💰 Fee and Payment Management
+### Fee and Payment Management
 - Automated fee collection and tracking.
 - Online payment integration with receipt generation.
 
-### 🛠️ Maintenance and Complaints
+###  Maintenance and Complaints
 - Easy submission and tracking of maintenance requests.
 - Transparent communication between students and management to ensure timely resolution.
 
 ---
 
-## 🎯 Why GatorNest?
+## Why GatorNest?
 GatorNest is designed to connect students and hostel administration seamlessly. It ensures efficient management while prioritizing student convenience, creating a modernized and user-friendly platform for all.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend: **React.js**
 - A dynamic and responsive user interface for intuitive navigation and usability.
