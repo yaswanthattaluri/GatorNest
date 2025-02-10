@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-HEAD
+
 # GatorNest: A Hostel Management System for the University of Florida
 
 ## Team Members
