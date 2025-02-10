@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/StaffLogin.css";
+import "../styles/StaffLogin.css"; // Keep only one import
 
 function StaffLogin() {
   const [formData, setFormData] = useState({
@@ -21,7 +21,6 @@ function StaffLogin() {
       <div className="StaffLogin-card">
         <h2 className="StaffLogin-heading">Staff Login</h2>
         <form onSubmit={handleSubmit} className="StaffLogin-form">
-          
           <label className="StaffLogin-label">Username:</label>
           <input
             type="email"
@@ -31,7 +30,6 @@ function StaffLogin() {
             required
             className="StaffLogin-input"
           />
-
           <label className="StaffLogin-label">Password:</label>
           <input
             type="password"

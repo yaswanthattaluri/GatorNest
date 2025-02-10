@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 HEAD
 # GatorNest: A Hostel Management System for the University of Florida
 
@@ -61,6 +62,8 @@ GatorNest is designed to connect students and hostel administration seamlessly. 
 Let’s make campus life smoother and more enjoyable for the Gator community!  
 🎓 Go Gators! 🐊
 
+=======
+>>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -69,4 +72,7 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<<<<<<< HEAD
 
+=======
+>>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)

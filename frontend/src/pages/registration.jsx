@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import "./registration.css"; 
+=======
+import "./registration.css"; // ✅ Import the CSS file
+>>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
 
 function Registration() {
   const [formData, setFormData] = useState({
@@ -16,9 +20,43 @@ function Registration() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     alert(`Registration successful for ${formData.name}!`);
   };
 
+=======
+
+    fetch("http://localhost:8080/api/student/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        dorm_preference: formData.dormPreference,
+        password: formData.password,
+      }),
+    })
+    .then((res) => {
+      if (!res.ok) {
+        return res.text().then((text) => {
+          throw new Error(`HTTP error! status: ${res.status} - ${text}`);
+        });
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log("Registration Success:", data);
+      alert(`Registration successful for ${formData.name}!`);
+    })
+    .catch((error) => {
+      console.error("Error during registration:", error);
+      alert("Registration failed, please try again.");
+    });
+  };
+
+
+>>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
   return (
     <div className="registration-container">
       <div className="registration-card">
