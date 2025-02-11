@@ -54,20 +54,17 @@
     margin-bottom: 8px;
 }
 
-/* ✅ FAQ Answer */
 .faq-answer {
     font-size: 16px;
     color: #444;
     line-height: 1.6;
-    display: none; /* ✅ Initially hidden */
+    display: none; 
 }
-
-/* ✅ Show FAQ answer when clicked */
 .faq-item.active .faq-answer {
     display: block;
 }
 
-/* ✅ Make FAQ Responsive */
+
 @media (max-width: 768px) {
     .faq-container {
         width: 90%;
