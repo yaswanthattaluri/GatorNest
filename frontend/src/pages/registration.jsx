@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-<<<<<<< HEAD
+import { useState } from "react";
 import "./registration.css"; 
-=======
-import "./registration.css"; // ✅ Import the CSS file
->>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
 
 function Registration() {
   const [formData, setFormData] = useState({
@@ -20,11 +16,6 @@ function Registration() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    alert(`Registration successful for ${formData.name}!`);
-  };
-
-=======
 
     fetch("http://localhost:8080/api/student/register", {
       method: "POST",
@@ -55,8 +46,6 @@ function Registration() {
     });
   };
 
-
->>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
   return (
     <div className="registration-container">
       <div className="registration-card">

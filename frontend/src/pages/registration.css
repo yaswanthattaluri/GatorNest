@@ -1,66 +1,102 @@
-/* Centering the container */
+/* ✅ Page Background */
 .registration-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-  }
-  
-  /* Form Card */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); /* Soft gradient */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* ✅ Registration Form Card */
+.registration-card {
+  background-color: white;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 420px;
+  max-width: 90%;
+  transition: 0.3s ease-in-out;
+}
+
+/* ✅ Add hover effect to form */
+.registration-card:hover {
+  transform: scale(1.02);
+}
+
+/* ✅ Heading */
+.registration-heading {
+  font-size: 26px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ✅ Form */
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ✅ Labels */
+.registration-label {
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+/* ✅ Input Fields */
+.registration-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: 0.3s ease-in-out;
+  background-color: #f8f9fa;
+}
+
+/* ✅ Input Hover & Focus */
+.registration-input:hover,
+.registration-input:focus {
+  border-color: #007BFF;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
+
+/* ✅ Submit Button */
+.registration-button {
+  background-color: #007BFF;
+  color: white;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: 0.3s ease-in-out;
+}
+
+.registration-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.03);
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
   .registration-card {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 350px;
+      width: 90%;
   }
-  
-  /* Heading */
-  .registration-heading {
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Form */
-  .registration-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Labels */
-  .registration-label {
-    align-self: flex-start;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  /* Input Fields */
-  .registration-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  
-  /* Submit Button */
-  .registration-button {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-  }
-  .registration-button:hover {
-    background-color: #0056b3;
-  }
-  
+}
