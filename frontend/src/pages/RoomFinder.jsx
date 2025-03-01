@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Table from "./Table";
 import Card from "./Card"; // Import Card component
 import "../styles/RoomFinder.css";

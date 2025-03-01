@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
 import Registration from "./pages/registration";
 import FAQ from "./pages/FAQ";
 import StudentLogin from "./pages/StudentLogin";
@@ -10,7 +11,6 @@ import gym from "./assets/gym.png";
 import FloatingWidget from "./pages/FloatingWidget";
 import Profile from "./pages/Profile";
 
-const Home = () => (
   <div>
     {/* Section 1 */}
     <section className="half-page-section">
@@ -61,13 +61,12 @@ const Home = () => (
       
     </section>
   </div>
-);
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/studentlogin" element={<StudentLogin />} />
