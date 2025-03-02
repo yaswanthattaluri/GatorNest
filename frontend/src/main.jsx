@@ -33,28 +33,32 @@ createRoot(document.getElementById("root")).render(
         </div>
 
         <nav style={{ display: "flex", gap: "25px" }}>
-          <a href="/" style={{ color: "#ffa500", textDecoration: "none", fontSize: "18px" }}>
+
+          
+          <a href="/" style={{ color: "white", textDecoration: "none", fontSize: "18px" }}>
             Home
           </a>
-          <a href="/registration" style={{ color: "#ffa500", textDecoration: "none", fontSize: "18px"  }}>
+          <a href="/registration" style={{ color: "white", textDecoration: "none", fontSize: "18px" }}>
             Registration
           </a>
-          <a href="/faq" style={{ color: "#ffa500", textDecoration: "none" , fontSize: "18px"}}>
-            FAQ
-          </a>
-          <a href="/studentlogin" style={{ color: "#ffa500", textDecoration: "none", fontSize: "18px" }}>
+          <a href="/studentlogin" style={{ color: "white", textDecoration: "none", fontSize: "18px" }}>
             Student Login
           </a>
-          <a href="/roomfinder" style={{ color: "#ffa500", textDecoration: "none", fontSize: "18px" }}>
-            Room Finder
+          <a href="/profile" style={{ color: "white", textDecoration: "none", fontSize: "18px" }}>
+            Profile
           </a>
-          <a href="/profile" style={{ color: "#ffa500", textDecoration: "none", fontSize: "18px" }}>
-            Student Profile
+          <a href="/roomfinder" style={{ color: "white", textDecoration: "none", fontSize: "18px" }}>
+            Find Room
           </a>
+      
+          <a href="/faq" style={{ color: "white", textDecoration: "none", fontSize: "18px" }}>
+            FAQ
+          </a>
+          
+
         </nav>
       </header>
 
-     
       <main style={{ flex: "1", padding: "20px", background: "white" }}>
         <App />
       </main>

@@ -5,12 +5,46 @@
   transition: filter 300ms;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.navbar, .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #0021A5; /* UF Blue */
+  color: white;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-img {
+  height: 50px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FA4616; /* UF Orange */
+}
+
+.navbar nav, .footer nav {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar nav a, .footer nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar nav a:hover, .footer nav a:hover {
+  color: #FA4616; /* UF Orange */
 }
 
 @keyframes logo-spin {
