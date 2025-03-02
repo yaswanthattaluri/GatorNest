@@ -9,8 +9,8 @@ const RoomFinder = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const flatTypes = ["1B", "2B", "3B"];
-  const columns = ["Room Number", "Dorm Number", "Students Enrolled", "Shared Rooms Available"];
+  const flatTypes = ["1B1B", "2B2B", "3B2B"];
+  const columns = ["Room Number", "Dorm Number", "Students Enrolled", "Shared Rooms Available", "Price"];
 
   useEffect(() => {
     const fetchRooms = async () => {
