@@ -1,0 +1,120 @@
+/* Homepage specific styles */
+:root {
+  --uf-blue: #0021A5;
+  --uf-orange: #FA4616;
+  --light-blue: #005496;
+  --light-gray: #F5F5F5;
+  --white: #FFFFFF;
+  --dark-gray: #333333;
+}
+
+.homepage-container {
+  width: 100%;
+}
+
+/* Hero Banner */
+.hero-banner {
+  background-color: var(--uf-blue);
+  background-image: linear-gradient(rgba(0, 33, 165, 0.8), rgba(0, 33, 165, 0.8)), url('../assets/cleanroom.png');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+  margin-bottom: 40px;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content p {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.cta-button {
+  background-color: var(--uf-orange);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.cta-button:hover {
+  background-color: white;
+  color: var(--uf-orange);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Updates Section */
+.updates-section {
+  background-color: var(--uf-blue);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  margin: 40px 0;
+}
+
+.updates-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+}
+
+.updates-section p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto 25px;
+  opacity: 0.9;
+}
+
+.update-cta {
+  background-color: white;
+  color: var(--uf-blue);
+  border: none;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-cta:hover {
+  background-color: var(--uf-orange);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+  
+  .updates-section h2 {
+    font-size: 1.8rem;
+  }
+  
+  .updates-section p {
+    font-size: 1rem;
+  }
+}
