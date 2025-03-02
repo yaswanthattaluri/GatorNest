@@ -31,71 +31,93 @@ const ProfilePage = () => {
     <div className="profile-container">
       <h2 className="profile-title">Student Profile & Preferences</h2>
       <form onSubmit={handleSubmit} className="profile-form">
+        
         {/* Personal Information */}
         <div className="profile-section">
           <h3>Personal Information</h3>
-          <label>Name:</label>
-          <input type="text" name="name" onChange={handleChange} required />
+          
+          <div className="input-group">
+            <label>Name:</label>
+            <input type="text" name="name" onChange={handleChange} required />
+          </div>
 
-          <label>Gender:</label>
-          <select name="gender" onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+          <div className="input-group">
+            <label>Gender:</label>
+            <select name="gender" onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-          <label>Age:</label>
-          <input type="number" name="age" onChange={handleChange} required />
+          <div className="input-group">
+            <label>Age:</label>
+            <input type="number" name="age" onChange={handleChange} required />
+          </div>
 
-          <label>Major:</label>
-          <input type="text" name="major" onChange={handleChange} required />
+          <div className="input-group">
+            <label>Major:</label>
+            <input type="text" name="major" onChange={handleChange} required />
+          </div>
 
-          <label>Language Spoken:</label>
-          <input type="text" name="language" onChange={handleChange} required />
+          <div className="input-group">
+            <label>Language Spoken:</label>
+            <input type="text" name="language" onChange={handleChange} required />
+          </div>
         </div>
 
-        {/* Preferences Section */}
+        {/* Roommate Preferences */}
         <div className="profile-section">
           <h3>Roommate Preferences</h3>
+          
+          <div className="input-group">
+            <label>Early Bird or Night Owl?</label>
+            <select name="earlyBird" onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="Early Bird">Early Bird</option>
+              <option value="Night Owl">Night Owl</option>
+            </select>
+          </div>
 
-          <label>Early Bird or Night Owl?</label>
-          <select name="earlyBird" onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="Early Bird">Early Bird</option>
-            <option value="Night Owl">Night Owl</option>
-          </select>
+          <div className="input-group">
+            <label>Cleanliness Habits:</label>
+            <select name="cleanliness" onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="Very Tidy">Very Tidy</option>
+              <option value="Moderately Tidy">Moderately Tidy</option>
+              <option value="Messy">Messy</option>
+            </select>
+          </div>
 
-          <label>Cleanliness Habits:</label>
-          <select name="cleanliness" onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="Very Tidy">Very Tidy</option>
-            <option value="Moderately Tidy">Moderately Tidy</option>
-            <option value="Messy">Messy</option>
-          </select>
+          <div className="input-group">
+            <label>Diet Preference:</label>
+            <select name="diet" onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Non-Vegetarian">Non-Vegetarian</option>
+            </select>
+          </div>
 
-          <label>Diet Preference:</label>
-          <select name="diet" onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="Vegetarian">Vegetarian</option>
-            <option value="Non-Vegetarian">Non-Vegetarian</option>
-          </select>
+          <div className="input-group">
+            <label>Visitors Allowed?</label>
+            <select name="visitors" onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="No Visitors">No Visitors</option>
+              <option value="Occasionally">Occasionally</option>
+              <option value="Anytime">Anytime</option>
+            </select>
+          </div>
 
-          <label>Visitors Allowed?</label>
-          <select name="visitors" onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="No Visitors">No Visitors</option>
-            <option value="Occasionally">Occasionally</option>
-            <option value="Anytime">Anytime</option>
-          </select>
-
-          <label>Same Language Preference?</label>
-          <select name="sameLanguage" onChange={handleChange} required>
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-            <option value="Doesn't Matter">Either one is fine</option>
-          </select>
+          <div className="input-group">
+            <label>Same Language Preference?</label>
+            <select name="sameLanguage" onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="Doesn't Matter">Either one is fine</option>
+            </select>
+          </div>
         </div>
 
         <button type="submit" className="profile-submit">Save Preferences</button>

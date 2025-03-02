@@ -1,54 +1,104 @@
-/* Ensure it doesn’t take global styles from App.css */
-.profile-container {
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 25px;
-  background: var(--light-bg);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: none;
+/* Profile Page Styling - GatorNest Theme */
+:root {
+  --primary-color: #005f99;
+  --secondary-color: #004080;
+  --background-color: #f2f2f2;
+  --text-color: #272728;
+  --accent-color: #f6aa18;
+  --light-bg: #ffffff;
 }
 
+/* General Page Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Profile Container */
+.profile-container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 30px;
+  background: var(--light-bg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Title Styling */
+.profile-title {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 2rem;
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+/* Form Layout */
 .profile-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Fix section layout */
+/* Section Styling */
 .profile-section {
   background: white;
-  padding: 20px;
-  border: none;
+  padding: 25px;
+  border-radius: 8px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Section Headers */
 .profile-section h3 {
   color: var(--secondary-color);
-  font-size: 1.4rem;
-  margin-bottom: 15px;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
 }
 
-/* Fix input width */
-.profile-section input,
-.profile-section select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background: var(--light-bg);
+/* Input and Select Box Styling */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  width: 100%; /* Take up full width of container */
+}
+
+.input-group label {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%; /* Full width */
+  padding: 12px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  transition: all 0.2s ease-in-out;
+  appearance: none; /* Removes browser default dropdown styling */
+  box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
-/* Fix button */
+/* Submit Button */
 .profile-submit {
   background: var(--accent-color);
   color: var(--text-color);
   border: none;
-  padding: 12px;
+  padding: 15px;
   font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.3s ease;
+  border-radius: 6px;
+  margin-top: 10px;
 }
 
 .profile-submit:hover {
