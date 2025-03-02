@@ -1,33 +1,36 @@
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* ✅ Universal App Styles - GatorNest */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ✅ Ensure content stays within a controlled layout */
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ✅ Navbar and Footer Styling */
 .navbar, .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background: #0021A5; /* UF Blue */
+  background: #0021A5;
   color: white;
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.logo-img {
-  height: 50px;
-}
-
-.logo-text {
-  font-size: 24px;
-  font-weight: bold;
-  color: #FA4616; /* UF Orange */
 }
 
 .navbar nav, .footer nav {
@@ -44,62 +47,17 @@
 }
 
 .navbar nav a:hover, .footer nav a:hover {
-  color: #FA4616; /* UF Orange */
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: "Arial", sans-serif;
-  box-sizing: border-box;
-  overflow-x: hidden; 
-}
-
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; 
-}
-
-.content {
-  flex: 1;
+  color: #FA4616;
 }
 
 .footer {
   background-color: #005f99;
   padding: 20px;
-  color: white;
   text-align: center;
   width: 100%;
-  position: relative; /* ✅ Makes sure it stays below the content */
-  left: 0; /* ✅ Aligns to the left properly */
 }
 
-/* ✅ Fix the left white space issue */
+/* ✅ Fix Footer Layout */
 .footer-container {
   width: 100%;
   display: flex;
@@ -123,68 +81,4 @@ body, html {
 
 .footer-button:hover {
   background-color: #e6b800;
-}
-  
-.half-page-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  min-height: 50vh;
-  background-color: #f9f9f9;
-  gap: 20px;
-}
-
-.text-content {
-  flex: 1;
-  padding: 20px;
-}
-
-.text-content h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.text-content ul {
-  list-style-type: disc;
-  padding-left: 20px;
-}
-
-.image-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-content img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.nav-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: #f5f5f5;
-}
-
-.button {
-  padding: 0.5rem 1rem;
-  background-color: #00509e;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.button:hover {
-  background-color: #003f7e;
 }
