@@ -4,7 +4,7 @@ import dormRoom from "../assets/cleanroom.png";
 import gatorStatue from "../assets/ufp3.jpg";
 import studyLounge from "../assets/studyspace.jpeg";
 import laundryRoom from "../assets/laundry.jpeg";
-import campusHero from "../assets/ufp1.jpg";
+//import campusHero from "../assets/ufp1.jpg";
 
 import "../styles/HomePage.css";
 
