@@ -3,9 +3,12 @@ import Registration from "./pages/registration";
 import FAQ from "./pages/FAQ";
 import StudentLogin from "./pages/StudentLogin";
 import StaffLogin from "./pages/StaffLogin";
+import RoomFinder from "./pages/RoomFinder";
 import "./App.css";
 import cleanroom from "./assets/cleanroom.png";
 import gym from "./assets/gym.png";
+import FloatingWidget from "./pages/FloatingWidget";
+import Profile from "./pages/Profile";
 
 const Home = () => (
   <div>
@@ -69,6 +72,9 @@ const App = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/studentlogin" element={<StudentLogin />} />
         <Route path="/stafflogin" element={<StaffLogin />} />
+        <Route path="/roomfinder" element={<RoomFinder />} />
+        <Route path="/floatingwidget" element={<FloatingWidget />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

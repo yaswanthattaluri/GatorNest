@@ -1,0 +1,94 @@
+/* Container for the profile form */
+.profile-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+  
+  /* Styling the form group (label and input) */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  /* Styling the text inputs and phone input */
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="radio"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  input[type="radio"] {
+    width: auto;
+    margin-right: 8px;
+  }
+  
+  /* Styling for Gender radio buttons */
+  .gender-options {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
+  
+  .gender-options label {
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    align-items: center;
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Focused inputs */
+  input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  /* Styling for error messages (if needed) */
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
