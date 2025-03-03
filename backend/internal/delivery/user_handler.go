@@ -3,45 +3,38 @@ package delivery
 import (
 	"backend/internal/entity"
 	"backend/internal/usecase"
-<<<<<<< HEAD
-	"github.com/gin-gonic/gin"
 	"net/http"
-=======
-	"net/http"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/gin-gonic/gin"
->>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
 )
 
+var jwtSecret = []byte("secretKey123") 
+
 type StudentHandler struct {
-	service *usecase.StudentService
+    service usecase.StudentService
 }
 
-func NewUserHandler(service *usecase.StudentService) *StudentHandler {
+
+func NewUserHandler(service usecase.StudentService) *StudentHandler {
 	return &StudentHandler{service: service}
 }
 
 func (h *StudentHandler) CreateUser(c *gin.Context) {
-	var user entity.Student
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+	var student entity.Student
+	if err := c.ShouldBindJSON(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-<<<<<<< HEAD
-	h.service.AddUser(user)
-	c.JSON(http.StatusCreated, gin.H{"message": "User received", "user": user})
-}
-
-func (h *StudentHandler) GetUsers(c *gin.Context) {
-	c.JSON(http.StatusOK, h.service.GetUsers())
-=======
-	if err := h.service.AddUser(user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save user"})
+	err := h.service.AddUser(student)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully!"})
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
 }
 
 func (h *StudentHandler) GetUsers(c *gin.Context) {
@@ -71,6 +64,47 @@ func (h *StudentHandler) LoginUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": user})
->>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
+	// Generate JWT Token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"email":   user.Email,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(), // Token expires in 24 hours
+	})
+
+	tokenString, err := token.SignedString(jwtSecret)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	// Return token
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Login successful",
+		"token":   tokenString,
+		"user":    user,
+	})
 }
+
+func (h *StudentHandler) UpdateProfile(c *gin.Context) {
+	var profile entity.Student
+	if err := c.ShouldBindJSON(&profile); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	id, exists := c.Get("user_id") 
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID missing"})
+		return
+	}
+	
+	
+
+	if err := h.service.UpdateProfile(id.(uint), profile); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update profile"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Profile updated successfully!"})
+}
+

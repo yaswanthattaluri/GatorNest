@@ -11,18 +11,18 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	dsn := "host=localhost user=postgres password=123 dbname=hosteldb port=5433 sslmode=disable"
+	dsn := "host=localhost user=postgres password=1234 dbname=hosteldb port=5433 sslmode=disable"
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
 
-	// Assign database instance to global variable
 	DB = database
 
-	// Run AutoMigrate to create/update tables
-	err = DB.AutoMigrate(&entity.Student{})
+	// Auto-migrate with new fields
+	err = DB.AutoMigrate(&entity.Student{}, &entity.Room{})
+
 	if err != nil {
 		panic("Failed to migrate database!")
 	}

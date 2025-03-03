@@ -1,49 +1,42 @@
 package usecase
 
-<<<<<<< HEAD
-import "backend/internal/entity"
-
-
-type StudentService struct{
-	students []entity.Student
-}
-=======
 import (
 	"backend/internal/entity"
 	"backend/internal/repository"
 	"errors"
 )
 
-type StudentService struct{}
->>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
-
-func NewUserService() *StudentService {
-	return &StudentService{}
+type StudentService interface {
+	AddUser(user entity.Student) error
+	GetUsers() ([]entity.Student, error)
+	LoginUser(email, password string) (*entity.Student, error)
+	UpdateProfile(id uint, profileData entity.Student) error
 }
 
-<<<<<<< HEAD
-func (s *StudentService) AddUser(user entity.Student)  {
-	s.students = append(s.students, user)
+type StudentServiceImpl struct {
+	repo repository.StudentRepository
 }
 
-func (s *StudentService) GetUsers() []entity.Student {
-	return s.students
+func NewUserService(repo repository.StudentRepository) StudentService {
+	return &StudentServiceImpl{repo: repo}
 }
 
-=======
-func (s *StudentService) AddUser(user entity.Student) error {
-	return repository.CreateStudent(&user)
+func (s *StudentServiceImpl) AddUser(user entity.Student) error {
+	return s.repo.CreateStudent(&user)
 }
 
-func (s *StudentService) GetUsers() ([]entity.Student, error) {
-	return repository.GetAllStudents()
+func (s *StudentServiceImpl) GetUsers() ([]entity.Student, error) {
+	return s.repo.GetAllStudents()
 }
 
-func (s *StudentService) LoginUser(email, password string) (*entity.Student, error) {
-	user, err := repository.FindStudentByEmailAndPassword(email, password)
+func (s *StudentServiceImpl) LoginUser(email, password string) (*entity.Student, error) {
+	user, err := s.repo.FindStudentByEmailAndPassword(email, password)
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}
 	return user, nil
 }
->>>>>>> 49d2a8b (Database integration, API fetch in frontend, APIs configuration in backend)
+
+func (s *StudentServiceImpl) UpdateProfile(id uint, profileData entity.Student) error {
+	return s.repo.UpdateStudentProfile(id, &profileData)
+}
