@@ -176,4 +176,90 @@ psql -U postgres -d hosteldb -h localhost -p 5433
   go run cmd/main.go
   ```
 
+---
+
+## 5. Frontend Cypress Test Documentation
+
+### **1. Authentication Tests (`auth.cy.js`)**
+
+- **Registration Form Display**  
+  - Verifies that the registration form is displayed with all required fields (Name, Email, Phone, Dorm Preference, Password).
+  
+- **Student Registration**  
+  - Ensures successful registration with valid input.
+  
+- **Student Login Form Display**  
+  - Ensures login form visibility.
+
+- **Login with Valid Credentials**  
+  - Verifies successful login.
+
+- **Login Failure**  
+  - Ensures error handling for incorrect login attempts.
+
+---
+
+### **2. Profile Page Tests (`profile.cy.js`)**
+
+- **Profile Page Navigation**  
+  - Ensures users can navigate to the profile page.
+
+- **Name Input Field & Gender Dropdown**  
+  - Ensures visibility and functionality.
+
+- **Additional Profile Tests**  
+  - Includes optional tests for roommate preferences and profile updates.
+
+---
+
+### **3. Page Loading Tests (`pages.cy.js`)**
+
+- **Home Page**  
+  - Verifies correct loading and display of key elements.
+
+- **Registration Page**  
+  - Ensures all required input fields are present.
+
+- **Student Login Page**  
+  - Verifies page loading and form visibility.
+
+- **Profile Page**  
+  - Checks sections like personal information and roommate preferences.
+
+- **Room Finder Page**  
+  - Ensures proper display of available room types.
+
+- **FAQ Page**  
+  - Validates correct FAQ section rendering.
+
+- **Floating Widget**  
+  - Ensures visibility on key pages.
+
+---
+
+## 6. Commit Summary for Sprint 2
+
+- **Sprint2.md created**
+- **Added Cypress tests for login and page loading**
+- **Updated test database, room/user handlers, and mock usecase services**
+- **Added mock room and student service for unit testing**
+- **Added unit tests for room and user handlers, and test database setup**
+- **API integration and new endpoints created**
+- **Fixed minor backend bugs and optimized response handling**
+- **Integrated frontend with backend APIs**
+- **Finalized database schema and auto migrations**
+
+---
+
+## 7. Final Notes
+
+- This document (`Sprint2.md`) contains backend API documentation, frontend Cypress tests, unit tests, and database setup instructions.
+- Ensure this file is pushed to GitHub for submission.
+- Run `go test ./...` to verify all backend unit tests pass.
+- Run `npx cypress run` to execute frontend Cypress tests.
+- Ensure the backend server is running before testing (`go run cmd/main.go`).
+- Validate database connectivity before deployment.
+
+
+
 
