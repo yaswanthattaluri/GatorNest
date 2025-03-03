@@ -239,7 +239,6 @@ psql -U postgres -d hosteldb -h localhost -p 5433
 
 ## 6. Commit Summary for Sprint 2
 
-- **Sprint2.md created**
 - **Added Cypress tests for login and page loading**
 - **Updated test database, room/user handlers, and mock usecase services**
 - **Added mock room and student service for unit testing**
@@ -251,14 +250,6 @@ psql -U postgres -d hosteldb -h localhost -p 5433
 
 ---
 
-## 7. Final Notes
-
-- This document (`Sprint2.md`) contains backend API documentation, frontend Cypress tests, unit tests, and database setup instructions.
-- Ensure this file is pushed to GitHub for submission.
-- Run `go test ./...` to verify all backend unit tests pass.
-- Run `npx cypress run` to execute frontend Cypress tests.
-- Ensure the backend server is running before testing (`go run cmd/main.go`).
-- Validate database connectivity before deployment.
 
 
 
