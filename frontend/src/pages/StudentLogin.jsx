@@ -13,7 +13,7 @@ function StudentLogin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     fetch("http://localhost:8080/api/student/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -22,23 +22,28 @@ function StudentLogin() {
         password: formData.password,
       }),
     })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((text) => {
-          throw new Error(`HTTP error! status: ${res.status} - ${text}`);
-        });
-      }
-      return res.json();
-    })
-    .then((data) => {
-      console.log("Login Success:", data);
-      alert(`Login successful for ${formData.email}!`);
-    })
-    .catch((error) => {
-      console.error("Error during login:", error);
-      alert("Login failed, please check your credentials and try again.");
-    });
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(`HTTP error! status: ${res.status} - ${text}`);
+          });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Login Success:", data);
+        
+        // Store the token in local storage
+        localStorage.setItem("token", data.token);
+        
+        alert(`Login successful for ${formData.email}!`);
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+        alert("Login failed, please check your credentials and try again.");
+      });
   };
+  
 
   return (
     <div className="StudentLogin-container">

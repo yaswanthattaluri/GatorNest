@@ -23,9 +23,52 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Profile preferences saved!");
-    navigate("/"); // Redirect to home after submitting
+  
+    const token = localStorage.getItem("token"); // Retrieve JWT token
+  
+    if (!token) {
+      alert("Unauthorized! Please log in again.");
+      navigate("/login"); // Redirect to login page if no token
+      return;
+    }
+  
+    fetch("http://localhost:8080/api/student/profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Attach token in headers
+      },
+      body: JSON.stringify({
+        gender: formData.gender,
+        age: parseInt(formData.age), // Ensure age is an integer
+        major: formData.major,
+        language_spoken: formData.language,
+        preference: formData.earlyBird,
+        cleanliness_habits: formData.cleanliness,
+        food_preference: formData.diet,
+        having_people_over: formData.visitors,
+        same_language_roommate: formData.sameLanguage,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(`Error: ${res.status} - ${text}`);
+          });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Profile Updated:", data);
+        alert("Profile preferences saved successfully!");
+        navigate("/"); // Redirect to home page
+      })
+      .catch((error) => {
+        console.error("Error updating profile:", error);
+        alert("Failed to update profile. Please try again.");
+      });
   };
+  
 
   return (
     <div className="profile-container">

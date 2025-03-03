@@ -4,31 +4,39 @@ import (
 	"backend/config"
 	"backend/internal/delivery"
 	"backend/internal/middleware"
-	"backend/internal/usecase"
 	"backend/internal/repository"
+	"backend/internal/usecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func main() {
 	r := gin.Default()
-	r.Use(cors.Default())
+
+	// Custom CORS Middleware
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"}, // Frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	config.ConnectDatabase()
 
-	db := config.DB 
+	db := config.DB
 	studentRepo := repository.NewStudentRepository(db)
 	studentService := usecase.NewUserService(studentRepo)
 
-
 	studentHandler := delivery.NewUserHandler(studentService)
 	roomRepo := repository.NewRoomRepository(config.DB)
-	roomUsecase := usecase.NewRoomUsecase(roomRepo) 
+	roomUsecase := usecase.NewRoomUsecase(roomRepo)
 
 	roomHandler := delivery.NewRoomHandler(roomUsecase)
 
-
-	// Public Routes (No authentication required)
+	// Public Routes
 	r.POST("/api/student/register", studentHandler.CreateUser)
 	r.POST("/api/student/login", studentHandler.LoginUser)
 
@@ -38,14 +46,14 @@ func main() {
 	auth.GET("/get-all", studentHandler.GetUsers)
 	auth.PUT("/profile", studentHandler.UpdateProfile)
 
-	// Public Routes
+	// Room Routes
 	roomRoutes := r.Group("/api/rooms")
-    {
-        roomRoutes.POST("/", roomHandler.CreateRoom)
-        roomRoutes.GET("/", roomHandler.GetRooms)
-        roomRoutes.POST("/:room_id/join", roomHandler.JoinRoom)
+	{
+		roomRoutes.POST("/", roomHandler.CreateRoom)
+		roomRoutes.GET("/", roomHandler.GetRooms)
+		roomRoutes.POST("/:room_id/join", roomHandler.JoinRoom)
 		roomRoutes.POST("/filter", roomHandler.GetRoomsByType)
-    }
-	
+	}
+
 	r.Run(":8080")
 }
