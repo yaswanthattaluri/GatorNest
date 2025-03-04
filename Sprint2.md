@@ -248,8 +248,3 @@ psql -U postgres -d hosteldb -h localhost -p 5433
 - **Finalized database schema and auto migrations**
 
 ---
-
-
-
-
-
