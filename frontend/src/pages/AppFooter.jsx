@@ -1,8 +1,5 @@
 import React from "react";
 import "../styles/AppFooter.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import StaffLogin from "./StaffLogin.jsx";
-
 
 const AppFooter = () => {
   return (
@@ -18,7 +15,7 @@ const AppFooter = () => {
         <p>Saturday - Sunday: Closed</p>
       </div>
       <div className="footer-column">
-        <a href="/StaffLogin" className="footer-button">Staff Login</a>
+        <a href="/stafflogin" className="footer-button">Staff Login</a>
       </div>
     </footer>
   );

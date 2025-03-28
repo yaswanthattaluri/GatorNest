@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import "../styles/StaffLogin.css"; // Keep only one import
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/StaffLogin.css";
 
 function StaffLogin() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -13,7 +15,28 @@ function StaffLogin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Login successful for ${formData.username}!`);
+    
+
+    if (formData.username && formData.password) {
+      console.log("Staff Login Success:", formData.username);
+
+      // Store the staff token in local storage
+      localStorage.setItem("staffToken", "mock-staff-token-123");
+      
+      // Set a staff-specific flag to differentiate from student login
+      localStorage.setItem("isStaff", "true");
+
+      // Dispatch a storage event to notify other components of the login change
+      // This is important to force the header to update immediately
+      window.dispatchEvent(new Event('storage'));
+
+      alert(`Login successful for ${formData.username}!`);
+      
+      // Redirect to staff home page after login
+      navigate("/staffhome");
+    } else {
+      alert("Please enter username and password");
+    }
   };
 
   return (
@@ -23,7 +46,7 @@ function StaffLogin() {
         <form onSubmit={handleSubmit} className="StaffLogin-form">
           <label className="StaffLogin-label">Username:</label>
           <input
-            type="email"
+            type="text"
             name="username"
             value={formData.username}
             onChange={handleChange}

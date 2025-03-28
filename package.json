@@ -4,8 +4,11 @@
   "description": "- **Sri Meghana Vaishnapu**  \r   **UFID:** 15258339",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "backend": "cd backend && npm start",
+  "frontend": "cd frontend && npm start",
+  "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yaswanthattaluri/GatorNest.git"
@@ -18,6 +21,7 @@
   },
   "homepage": "https://github.com/yaswanthattaluri/GatorNest#readme",
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "cypress": "^14.1.0"
   },
   "dependencies": {
