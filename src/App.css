@@ -1,0 +1,84 @@
+/* ✅ Universal App Styles - GatorNest */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ✅ Ensure content stays within a controlled layout */
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ✅ Navbar and Footer Styling */
+.navbar, .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #0021A5;
+  color: white;
+}
+
+.navbar nav, .footer nav {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar nav a, .footer nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar nav a:hover, .footer nav a:hover {
+  color: #FA4616;
+}
+
+.footer {
+  background-color: #005f99;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ✅ Fix Footer Layout */
+.footer-container {
+  width: 100%;
+  display: flex;
+  justify-content: center; 
+}
+
+.footer-column {
+  display: inline-block;
+  margin: 10px;
+  text-align: left;
+}
+
+.footer-button {
+  padding: 10px 15px;
+  background-color: #ffcc00;
+  color: black;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-button:hover {
+  background-color: #e6b800;
+}
