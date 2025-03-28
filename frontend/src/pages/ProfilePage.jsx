@@ -10,6 +10,7 @@ const ProfilePage = () => {
     age: "",
     major: "",
     language: "",
+    contact: "", // Added contact field
     earlyBird: "",
     cleanliness: "",
     diet: "",
@@ -23,15 +24,15 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const token = localStorage.getItem("token"); // Retrieve JWT token
-  
+
     if (!token) {
       alert("Unauthorized! Please log in again.");
       navigate("/login"); // Redirect to login page if no token
       return;
     }
-  
+
     fetch("http://localhost:8080/api/student/profile", {
       method: "PUT",
       headers: {
@@ -43,6 +44,7 @@ const ProfilePage = () => {
         age: parseInt(formData.age), // Ensure age is an integer
         major: formData.major,
         language_spoken: formData.language,
+        contact: formData.contact, // Include contact in request payload
         preference: formData.earlyBird,
         cleanliness_habits: formData.cleanliness,
         food_preference: formData.diet,
@@ -68,17 +70,15 @@ const ProfilePage = () => {
         alert("Failed to update profile. Please try again.");
       });
   };
-  
 
   return (
     <div className="profile-container">
       <h2 className="profile-title">Student Profile & Preferences</h2>
       <form onSubmit={handleSubmit} className="profile-form">
-        
         {/* Personal Information */}
         <div className="profile-section">
           <h3>Personal Information</h3>
-          
+
           <div className="input-group">
             <label>Name:</label>
             <input type="text" name="name" onChange={handleChange} required />
@@ -108,12 +108,23 @@ const ProfilePage = () => {
             <label>Language Spoken:</label>
             <input type="text" name="language" onChange={handleChange} required />
           </div>
+
+          {/* New Contact Field */}
+          <div className="input-group">
+            <label>Contact Number:</label>
+            <input
+              type="text"
+              name="contact"
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
         {/* Roommate Preferences */}
         <div className="profile-section">
           <h3>Roommate Preferences</h3>
-          
+
           <div className="input-group">
             <label>Early Bird or Night Owl?</label>
             <select name="earlyBird" onChange={handleChange} required>
@@ -163,7 +174,9 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <button type="submit" className="profile-submit">Save Preferences</button>
+        <button type="submit" className="profile-submit">
+          Save Preferences
+        </button>
       </form>
     </div>
   );

@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import logo from "./assets/logo.png";
 import AppFooter from "./pages/AppFooter.jsx";
 import FloatingWidget from "./pages/FloatingWidget.jsx";
+import defaultProfilePic from "./assets/default-image.png"; // Add a default profile picture
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -19,6 +20,8 @@ function MainApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isStaffLoggedIn, setIsStaffLoggedIn] = useState(false);
   const [reloadFlag, setReloadFlag] = useState(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userProfilePic, setUserProfilePic] = useState(defaultProfilePic);
 
   // Check login status on initial load, route changes, and localStorage changes
   useEffect(() => {
@@ -27,11 +30,15 @@ function MainApp() {
         const token = localStorage.getItem("token");
         const staffToken = localStorage.getItem("staffToken");
         const isStaff = localStorage.getItem("isStaff");
+        const profilePic = localStorage.getItem("profilePic");
         
         console.log("Checking login status - Staff:", isStaff, "Staff Token:", staffToken);
         
         if (token) {
           setIsLoggedIn(true); // Token exists -> User is logged in
+          if (profilePic) {
+            setUserProfilePic(profilePic);
+          }
         } else {
           setIsLoggedIn(false); // No token -> User is logged out
         }
@@ -84,6 +91,7 @@ function MainApp() {
   const handleLogout = () => {
     try {
       localStorage.removeItem("token"); // Remove token on logout
+      localStorage.removeItem("profilePic"); // Remove profile pic
       setIsLoggedIn(false);
       
       // Trigger event to notify other components
@@ -98,7 +106,8 @@ function MainApp() {
   };
   
   // Handle staff logout functionality
-  const handleStaffLogout = () => {
+  const handleStaffLogout = (e) => {
+    e.preventDefault(); // Prevent default link behavior
     try {
       localStorage.removeItem("staffToken"); // Remove staff token on logout
       localStorage.removeItem("isStaff"); // Remove staff flag
@@ -113,6 +122,11 @@ function MainApp() {
       console.error("Error during staff logout:", err);
       alert("There was an error logging out. Please try again.");
     }
+  };
+
+  // Toggle dropdown menu
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -143,7 +157,7 @@ function MainApp() {
         </div>
 
         {/* Navbar with Conditional Rendering */}
-        <nav style={{ display: "flex", gap: "25px" }}>
+        <nav style={{ display: "flex", gap: "25px", alignItems: "center" }}>
           <a
             href="/"
             style={{
@@ -188,33 +202,22 @@ function MainApp() {
               >
                 Manage Rooms
               </a>
-              <button
-                onClick={handleStaffLogout}
-                style={{
-                  backgroundColor: "#ffa500",
-                  color: "white",
-                  border: "none",
-                  padding: "5px 10px",
-                  cursor: "pointer",
-                  fontSize: "18px",
-                }}
-              >
-                Staff Logout
-              </button>
-            </>
-          ) : isLoggedIn ? (
-            <>
-              {/* Student Logged In Navigation Items */}
               <a
-                href="/profile"
+                href="/"
+                onClick={handleStaffLogout}
                 style={{
                   color: "white",
                   textDecoration: "none",
                   fontSize: "18px",
+                  cursor: "pointer"
                 }}
               >
-                Profile
+                Logout
               </a>
+            </>
+          ) : isLoggedIn ? (
+            <>
+              {/* Student Logged In Navigation Items */}
               <a
                 href="/roomfinder"
                 style={{
@@ -245,19 +248,64 @@ function MainApp() {
               >
                 FAQ
               </a>
-              <button
-                onClick={handleLogout}
-                style={{
-                  backgroundColor: "#ffa500",
-                  color: "white",
-                  border: "none",
-                  padding: "5px 10px",
-                  cursor: "pointer",
-                  fontSize: "18px",
+              
+              {/* Profile Dropdown */}
+              <div 
+                style={{ 
+                  position: 'relative', 
+                  cursor: 'pointer' 
                 }}
+                onClick={toggleDropdown}
               >
-                Student Logout
-              </button>
+                <img 
+                  src={userProfilePic} 
+                  alt="Profile" 
+                  style={{ 
+                    width: '40px', 
+                    height: '40px', 
+                    borderRadius: '50%', 
+                    objectFit: 'cover' 
+                  }} 
+                />
+                {isDropdownOpen && (
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      backgroundColor: 'white',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                      zIndex: 10,
+                      width: '150px'
+                    }}
+                  >
+                    <a 
+                      href="/profile"
+                      style={{
+                        display: 'block',
+                        padding: '10px',
+                        color: 'black',
+                        textDecoration: 'none',
+                        borderBottom: '1px solid #ddd'
+                      }}
+                    >
+                      Profile
+                    </a>
+                    <div 
+                      onClick={handleLogout}
+                      style={{
+                        padding: '10px',
+                        color: 'black',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Logout
+                    </div>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
@@ -311,3 +359,5 @@ function MainApp() {
     </div>
   );
 }
+
+export default MainApp;
