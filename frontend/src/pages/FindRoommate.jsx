@@ -59,38 +59,53 @@ function FindRoommate() {
       }
     }
   ];
-
   useEffect(() => {
-    // In a real app, this would be an API call
-    // For now, we're using mock data
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+  
+      const token = localStorage.getItem("token"); // Retrieve JWT token
+  
       try {
-        // Simulate API call delay
-        setTimeout(() => {
-          setStudentProfiles(mockProfiles);
-          setFilteredProfiles(mockProfiles);
-          setLoading(false);
-        }, 1000);
-        
-        // Real API call would look like:
-        // const response = await fetch('http://localhost:8080/api/student/profiles');
-        // const data = await response.json();
-        // setStudentProfiles(data);
-        // setFilteredProfiles(data);
+        const response = await fetch("http://localhost:8080/api/student/get-all", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+  
+        // Ensure the response structure matches the expected format
+        const formattedData = data.map(student => ({
+          id: student.id,
+          name: student.name,
+          gender: student.gender,
+          preferences: {
+            sleepSchedule: student.sleep_schedule || "Not Specified",
+            cleanliness: student.cleanliness || "Not Specified",
+            socialPreference: student.social_preference || "Not Specified",
+          },
+        }));
+  
+        setStudentProfiles(formattedData);
+        setFilteredProfiles(formattedData);
       } catch (err) {
-        setError("Failed to load student profiles");
+        console.error("Error fetching student profiles:", err);
+        setError("Failed to fetch student profiles");
+      } finally {
         setLoading(false);
       }
     };
-
-    // Load saved favorites from localStorage
-    const savedFavorites = localStorage.getItem('favoriteRoommates');
-    if (savedFavorites) {
-      setFavoriteProfiles(JSON.parse(savedFavorites));
-    }
-
+  
     fetchData();
   }, []);
+  
 
   // Handle filter changes
   const handleFilterChange = (e) => {

@@ -6,16 +6,15 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte("secretKey123") 
+var jwtSecret = []byte("secretKey123")
 
 type StudentHandler struct {
-    service usecase.StudentService
+	service usecase.StudentService
 }
-
 
 func NewUserHandler(service usecase.StudentService) *StudentHandler {
 	return &StudentHandler{service: service}
@@ -44,7 +43,29 @@ func (h *StudentHandler) GetUsers(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	var studentResponses []gin.H
+	for _, student := range users {
+		studentResponses = append(studentResponses, gin.H{
+			"id":                student.ID,
+			"name":              student.Name,
+			"gender":            student.Gender,
+			"room_id":           student.RoomID,
+			"sleep_schedule":    formatValue(string(student.Preference)),
+			"cleanliness":       formatValue(string(student.Cleanliness)),
+			"food_preference":   formatValue(string(student.FoodPref)),
+			"social_preference": formatValue(string(student.PeopleOver)),
+			"language_pref":     formatValue(string(student.LangPref)),
+		})
+	}
+
+	c.JSON(http.StatusOK, studentResponses)
+}
+
+func formatValue(value string) string {
+	if value == "" {
+		return "Not Specified"
+	}
+	return value
 }
 
 func (h *StudentHandler) LoginUser(c *gin.Context) {
@@ -92,13 +113,11 @@ func (h *StudentHandler) UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	id, exists := c.Get("user_id") 
+	id, exists := c.Get("user_id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID missing"})
 		return
 	}
-	
-	
 
 	if err := h.service.UpdateProfile(id.(uint), profile); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update profile"})
@@ -108,3 +127,50 @@ func (h *StudentHandler) UpdateProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Profile updated successfully!"})
 }
 
+func (h *StudentHandler) GetFilteredStudents(c *gin.Context) {
+	gender := c.Query("gender")
+	preference := c.Query("preference")
+	foodPreference := c.Query("food_preference")
+
+	students, err := h.service.GetFilteredStudents(gender, preference, foodPreference)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve students"})
+		return
+	}
+
+	var studentResponses []gin.H
+	for _, student := range students {
+		studentResponses = append(studentResponses, gin.H{
+			"id":                student.ID,
+			"name":              student.Name,
+			"gender":            student.Gender,
+			"room_id":           student.RoomID,
+			"sleep_schedule":    formatValue(string(student.Preference)),
+			"cleanliness":       formatValue(string(student.Cleanliness)),
+			"food_preference":   formatValue(string(student.FoodPref)),
+			"social_preference": formatValue(string(student.PeopleOver)),
+			"language_pref":     formatValue(string(student.LangPref)),
+		})
+	}
+
+	c.JSON(http.StatusOK, studentResponses)
+}
+
+
+func (h *StudentHandler) SearchStudents(c *gin.Context) {
+    searchType := c.Query("type")  // name, studentId, or roomNumber
+    searchTerm := c.Query("term")
+
+    if searchType == "" || searchTerm == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Both 'type' and 'term' query parameters are required"})
+        return
+    }
+
+    students, err := h.service.SearchStudents(searchType, searchTerm)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching student records"})
+        return
+    }
+
+    c.JSON(http.StatusOK, students)
+}

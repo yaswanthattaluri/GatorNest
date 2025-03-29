@@ -10,38 +10,26 @@ function StudentSearch() {
   const [error, setError] = useState(null);
 
   const handleSearch = async () => {
-    // Reset previous error and set loading
     setError(null);
     setLoading(true);
-
+  
     try {
-      // Modify the API endpoint to match your backend
-      const response = await axios.get('/api/students/search', {
-        params: {
-          type: searchType,
-          term: searchTerm
-        }
+      const response = await axios.get('http://localhost:8080/api/students/search', {
+        params: { type: searchType, term: searchTerm }
       });
-
-      // Ensure the response is an array
-      const resultsArray = Array.isArray(response.data) 
-        ? response.data 
-        : (response.data.students || []);
-
-      setSearchResults(resultsArray);
-      
-      // If no results found, set an informative message
-      if (resultsArray.length === 0) {
-        setError('No students found matching the search criteria.');
+  
+      setSearchResults(response.data.length > 0 ? response.data : []);
+      if (response.data.length === 0) {
+        setError('No students found.');
       }
     } catch (err) {
-      console.error('Search failed:', err);
-      setError(err.response?.data?.message || 'Failed to fetch student data. Please try again.');
+      setError(err.response?.data?.message || 'Failed to fetch student data.');
       setSearchResults([]);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="student-search-container">
@@ -97,21 +85,22 @@ function StudentSearch() {
           </thead>
           <tbody>
             {searchResults.map((student) => (
-              <tr key={student.studentId || Math.random()}>
-                <td>{student.name}</td>
-                <td>{student.studentId}</td>
-                <td>{student.roomNumber}</td>
-                <td>{student.dormNumber}</td>
-                <td>{student.contactNumber}</td>
-                <td>{student.age}</td>
-                <td>{student.gender}</td>
-                <td>{student.preferences?.dietaryRestrictions || 'N/A'}</td>
-                <td>{student.preferences?.sleepSchedule || 'N/A'}</td>
-                <td>{student.preferences?.cleanliness || 'N/A'}</td>
-                <td>{student.preferences?.socialPreference || 'N/A'}</td>
+              <tr key={student.id}>
+                <td>{student.name || 'N/A'}</td>
+                <td>{student.id || 'N/A'}</td>
+                <td>{student.room_id !== null ? student.room_id : 'N/A'}</td>
+                <td>{student.dorm_preference || 'N/A'}</td>
+                <td>{student.phone || 'N/A'}</td>
+                <td>{student.age || 'N/A'}</td>
+                <td>{student.gender || 'N/A'}</td>
+                <td>{student.food_preference || 'N/A'}</td>
+                <td>{student.preference || 'N/A'}</td>
+                <td>{student.cleanliness || 'N/A'}</td>
+                <td>{student.social_preference || 'N/A'}</td>
               </tr>
             ))}
           </tbody>
+
         </table>
       )}
     </div>

@@ -14,14 +14,14 @@ const (
 	VeryTidy      Cleanliness = "Very Tidy"
 	ModeratelyTidy Cleanliness = "Moderately Tidy"
 	Messy         Cleanliness = "Messy"
-	NoGuests      PeopleOver = "Don't want anyone over"
-	OccasionalGuests PeopleOver = "Occasionally don't mind"
-	AlwaysGuests  PeopleOver = "Can have people over all the time"
+	NoGuests      PeopleOver = "Private Space"
+	OccasionalGuests PeopleOver = "Occasional Visitors"
+	AlwaysGuests  PeopleOver = "Social Space"
 	Veg          FoodPreference = "Veg"
 	NonVeg       FoodPreference = "Non-Veg"
 	SameLanguage LanguagePreference = "Yes"
 	NoPreference LanguagePreference = "No"
-	EitherWay    LanguagePreference = "Don't mind either way"
+	EitherWay    LanguagePreference = "Either one is fine"
 )
 
 type Student struct {
@@ -31,6 +31,7 @@ type Student struct {
 	DeletedAt      *time.Time `gorm:"index" json:"deleted_at,omitempty"`
 	Name           string     `json:"name"`
 	Email          string     `json:"email"`
+	RoomID         *uint      `json:"room_id"`
 	Phone          string     `json:"phone,omitempty"`
 	DormPreference string     `json:"dorm_preference,omitempty"`
 	Password       string     `json:"password"`
@@ -44,3 +45,4 @@ type Student struct {
 	PeopleOver     PeopleOver `json:"people_over,omitempty"`
 	LangPref       LanguagePreference `json:"language_preference,omitempty"`
 }
+

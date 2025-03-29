@@ -6,9 +6,11 @@ import (
 	"backend/internal/middleware"
 	"backend/internal/repository"
 	"backend/internal/usecase"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"time"
+	// "net/http"
 )
 
 func main() {
@@ -32,27 +34,57 @@ func main() {
 
 	studentHandler := delivery.NewUserHandler(studentService)
 	roomRepo := repository.NewRoomRepository(config.DB)
-	roomUsecase := usecase.NewRoomUsecase(roomRepo)
+	roomUsecase := usecase.NewRoomUsecase(roomRepo, studentRepo)
 
 	roomHandler := delivery.NewRoomHandler(roomUsecase)
+
 
 	// Public Routes
 	r.POST("/api/student/register", studentHandler.CreateUser)
 	r.POST("/api/student/login", studentHandler.LoginUser)
+
+	r.GET("/api/students/search", studentHandler.SearchStudents)
+
 
 	// Protected Routes (Require authentication via JWT)
 	auth := r.Group("/api/student")
 	auth.Use(middleware.JWTAuthMiddleware())
 	auth.GET("/get-all", studentHandler.GetUsers)
 	auth.PUT("/profile", studentHandler.UpdateProfile)
+	auth.GET("/students/filter", studentHandler.GetFilteredStudents)
+	
+
+
+	// auth.POST("/rooms/:room_id/join", roomHandler.JoinRoom)
 
 	// Room Routes
 	roomRoutes := r.Group("/api/rooms")
+
+	// Public routes
+	roomRoutes.GET("/", roomHandler.GetRooms)
+	roomRoutes.POST("/filter", roomHandler.GetRoomsByType)
+	roomRoutes.DELETE("/number/:room_number", roomHandler.DeleteRoomByNumber)
+
+
+	// Protected room routes (Admin Only)
+	protectedRoomRoutes := roomRoutes.Group("/")
+	protectedRoomRoutes.Use(middleware.AdminAuthMiddleware())
+
+	// Using public route for now
+	roomRoutes.POST("/", roomHandler.CreateRoom)
+	roomRoutes.POST("/:room_id/join", roomHandler.JoinRoom)
+
+
+	// Initialize repositories & usecases
+	adminRepo := repository.NewAdminRepository(db)
+	adminUsecase := usecase.NewAdminService(adminRepo)
+	adminHandler := delivery.NewAdminHandler(adminUsecase)
+
+	adminRoutes := r.Group("/api/admin")
 	{
-		roomRoutes.POST("/", roomHandler.CreateRoom)
-		roomRoutes.GET("/", roomHandler.GetRooms)
-		roomRoutes.POST("/:room_id/join", roomHandler.JoinRoom)
-		roomRoutes.POST("/filter", roomHandler.GetRoomsByType)
+		adminRoutes.POST("/register", adminHandler.RegisterAdmin)
+		adminRoutes.POST("/login", adminHandler.LoginAdmin)
+		adminRoutes.GET("/all", adminHandler.GetAllAdmins)
 	}
 
 	r.Run(":8080")

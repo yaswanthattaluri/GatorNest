@@ -46,10 +46,10 @@ const ProfilePage = () => {
         language_spoken: formData.language,
         contact: formData.contact, // Include contact in request payload
         preference: formData.earlyBird,
-        cleanliness_habits: formData.cleanliness,
+        cleanliness: formData.cleanliness,
         food_preference: formData.diet,
-        having_people_over: formData.visitors,
-        same_language_roommate: formData.sameLanguage,
+        people_over: formData.visitors,
+        language_preference: formData.sameLanguage,
       }),
     })
       .then((res) => {
@@ -148,8 +148,8 @@ const ProfilePage = () => {
             <label>Diet Preference:</label>
             <select name="diet" onChange={handleChange} required>
               <option value="">Select</option>
-              <option value="Vegetarian">Vegetarian</option>
-              <option value="Non-Vegetarian">Non-Vegetarian</option>
+              <option value="Vegetarian">Veg</option>
+              <option value="Non-Vegetarian">Non-Veg</option>
             </select>
           </div>
 
@@ -157,9 +157,9 @@ const ProfilePage = () => {
             <label>Visitors Allowed?</label>
             <select name="visitors" onChange={handleChange} required>
               <option value="">Select</option>
-              <option value="No Visitors">No Visitors</option>
-              <option value="Occasionally">Occasionally</option>
-              <option value="Anytime">Anytime</option>
+              <option value="No Visitors">Private Space</option>
+              <option value="Occasionally">Occasional Visitors</option>
+              <option value="Anytime">Social Space</option>
             </select>
           </div>
 
