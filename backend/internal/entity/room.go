@@ -10,4 +10,5 @@ type Room struct {
     Vacancy   int        `json:"vacancy"`
     Price     int        `json:"price"`
     RoomNumber int       `json:"room_number"`
+
 }

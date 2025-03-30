@@ -7,16 +7,14 @@ import (
 )
 
 type StudentService interface {
-    AddUser(user entity.Student) error
-    GetUsers() ([]entity.Student, error)
-    LoginUser(email, password string) (*entity.Student, error)
-    UpdateProfile(id uint, profileData entity.Student) error
-    GetFilteredStudents(gender, preference, foodPreference string) ([]entity.Student, error)
+	AddUser(user entity.Student) error
+	GetUsers() ([]entity.Student, error)
+	LoginUser(email, password string) (*entity.Student, error)
+	UpdateProfile(id uint, profileData entity.Student) error
+	GetFilteredStudents(gender, preference, foodPreference string) ([]entity.Student, error)
 
-    SearchStudents(searchType, searchTerm string) ([]entity.Student, error)
+	SearchStudents(searchType, searchTerm string) ([]entity.Student, error)
 }
-
-
 
 type StudentServiceImpl struct {
 	repo repository.StudentRepository
@@ -55,18 +53,19 @@ func (m *MockStudentService) GetFilteredStudents(gender, preference, foodPrefere
 }
 
 func (s *StudentServiceImpl) SearchStudents(searchType, searchTerm string) ([]entity.Student, error) {
-    switch searchType {
-    case "name":
-        return s.repo.SearchStudentsByName(searchTerm)
-    case "studentId":
-        student, err := s.repo.SearchStudentsByID(searchTerm)
-        if err != nil {
-            return nil, err
-        }
-        return []entity.Student{*student}, nil
-    case "roomNumber":
-        return s.repo.SearchStudentsByRoomNumber(searchTerm)
-    default:
-        return nil, errors.New("Invalid search type")
-    }
+	switch searchType {
+	case "name":
+		return s.repo.SearchStudentsByName(searchTerm)
+	case "id":
+		student, err := s.repo.SearchStudentsByID(searchTerm)
+		if err != nil {
+			return nil, err
+		}
+		return []entity.Student{*student}, nil
+	case "roomNumber":
+
+		return s.repo.SearchStudentsByRoomNumber(searchTerm)
+	default:
+		return nil, errors.New("Invalid search type")
+	}
 }

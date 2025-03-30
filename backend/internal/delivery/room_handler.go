@@ -3,7 +3,7 @@ package delivery
 import (
     "net/http"
     "strconv"
-
+    "fmt"
     "backend/internal/usecase"
     "github.com/gin-gonic/gin"
 )
@@ -40,13 +40,15 @@ func (h *RoomHandler) CreateRoom(c *gin.Context) {
 }
 
 func (h *RoomHandler) GetRooms(c *gin.Context) {
+    fmt.Println("GetRooms called")  // Debugging
     rooms, err := h.roomUsecase.GetRooms()
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch rooms"})
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
     c.JSON(http.StatusOK, rooms)
 }
+
 
 func (h *RoomHandler) JoinRoom(c *gin.Context) {
     roomID, err := strconv.Atoi(c.Param("room_id"))
@@ -90,18 +92,15 @@ func (h *RoomHandler) GetRoomsByType(c *gin.Context) {
 }
 
 
-func (h *RoomHandler) DeleteRoomByNumber(c *gin.Context) {
-    roomNumber, err := strconv.Atoi(c.Param("room_number"))
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid room number"})
-        return
-    }
+func (h *RoomHandler) DeleteRoom(c *gin.Context) {
+    roomNumber := c.Param("room_number")
 
-    err = h.roomUsecase.DeleteRoomByNumber(roomNumber)
+    err := h.roomUsecase.DeleteRoomByRoomNumber(roomNumber)
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not delete room"})
         return
     }
 
     c.JSON(http.StatusOK, gin.H{"message": "Room deleted successfully"})
 }
+

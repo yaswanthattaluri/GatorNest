@@ -11,9 +11,9 @@ type RoomRepository interface {
     GetRooms() ([]entity.Room, error)
     GetRoomByID(roomID uint) (*entity.Room, error)
     GetRoomByNumber(roomNumber int) (*entity.Room, error)
-    DeleteRoomByNumber(roomNumber int) error
     UpdateRoom(room *entity.Room) error
     FindRoomsByType(roomType string) ([]entity.Room, error) 
+    DeleteRoomByRoomNumber(roomNumber string) error
 }
 
 
@@ -40,13 +40,10 @@ func (r *roomRepository) GetRoomByNumber(roomNumber int) (*entity.Room, error) {
     return &room, nil
 }
 
-func (r *roomRepository) DeleteRoomByNumber(roomNumber int) error {
-    result := r.db.Where("room_number = ?", roomNumber).Delete(&entity.Room{})
-    if result.RowsAffected == 0 {
-        return errors.New("room not found")
-    }
-    return result.Error
+func (r *roomRepository) DeleteRoomByRoomNumber(roomNumber string) error {
+    return r.db.Where("room_number = ?", roomNumber).Delete(&entity.Room{}).Error
 }
+
 
 
 func (r *roomRepository) GetRooms() ([]entity.Room, error) {

@@ -6,6 +6,7 @@ import (
 	"backend/internal/middleware"
 	"backend/internal/repository"
 	"backend/internal/usecase"
+
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -18,7 +19,7 @@ func main() {
 
 	// Custom CORS Middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // Frontend URL
+		AllowOrigins:     []string{"*"}, // Frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length", "Authorization"},
@@ -33,18 +34,19 @@ func main() {
 	studentService := usecase.NewUserService(studentRepo)
 
 	studentHandler := delivery.NewUserHandler(studentService)
+
 	roomRepo := repository.NewRoomRepository(config.DB)
 	roomUsecase := usecase.NewRoomUsecase(roomRepo, studentRepo)
-
 	roomHandler := delivery.NewRoomHandler(roomUsecase)
 
+	
 
 	// Public Routes
 	r.POST("/api/student/register", studentHandler.CreateUser)
 	r.POST("/api/student/login", studentHandler.LoginUser)
 
 	r.GET("/api/students/search", studentHandler.SearchStudents)
-
+	r.GET("/api/rooms", roomHandler.GetRooms)
 
 	// Protected Routes (Require authentication via JWT)
 	auth := r.Group("/api/student")
@@ -52,28 +54,20 @@ func main() {
 	auth.GET("/get-all", studentHandler.GetUsers)
 	auth.PUT("/profile", studentHandler.UpdateProfile)
 	auth.GET("/students/filter", studentHandler.GetFilteredStudents)
-	
-
 
 	// auth.POST("/rooms/:room_id/join", roomHandler.JoinRoom)
 
 	// Room Routes
 	roomRoutes := r.Group("/api/rooms")
 
-	// Public routes
-	roomRoutes.GET("/", roomHandler.GetRooms)
-	roomRoutes.POST("/filter", roomHandler.GetRoomsByType)
-	roomRoutes.DELETE("/number/:room_number", roomHandler.DeleteRoomByNumber)
-
-
-	// Protected room routes (Admin Only)
-	protectedRoomRoutes := roomRoutes.Group("/")
-	protectedRoomRoutes.Use(middleware.AdminAuthMiddleware())
-
-	// Using public route for now
+	// roomRoutes.GET("/", roomHandler.GetRooms)  // Correctly maps GET /api/rooms
 	roomRoutes.POST("/", roomHandler.CreateRoom)
 	roomRoutes.POST("/:room_id/join", roomHandler.JoinRoom)
+	roomRoutes.DELETE("/number/:room_number", roomHandler.DeleteRoom) // Corrected delete route
 
+	// Protected room routes (Admin Only)
+	// protectedRoomRoutes := roomRoutes.Group("/")
+	// protectedRoomRoutes.Use(middleware.AdminAuthMiddleware())
 
 	// Initialize repositories & usecases
 	adminRepo := repository.NewAdminRepository(db)

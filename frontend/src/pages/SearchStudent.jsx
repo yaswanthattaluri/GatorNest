@@ -41,7 +41,7 @@ function StudentSearch() {
           className="search-select"
         >
           <option value="name">Search by Name</option>
-          <option value="studentId">Search by Student ID</option>
+          <option value="id">Search by Student ID</option>
           <option value="roomNumber">Search by Room Number</option>
         </select>
         <input 
@@ -96,7 +96,7 @@ function StudentSearch() {
                 <td>{student.food_preference || 'N/A'}</td>
                 <td>{student.preference || 'N/A'}</td>
                 <td>{student.cleanliness || 'N/A'}</td>
-                <td>{student.social_preference || 'N/A'}</td>
+                <td>{student.people_over || 'N/A'}</td>
               </tr>
             ))}
           </tbody>

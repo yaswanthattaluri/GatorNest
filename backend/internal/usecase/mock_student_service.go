@@ -28,3 +28,29 @@ func (m *MockStudentService) UpdateProfile(id uint, profileData entity.Student) 
 	args := m.Called(id, profileData)
 	return args.Error(0)
 }
+
+
+
+func(m *MockStudentService) SearchStudents(searchType, searchTerm string) ([]entity.Student, error){
+	args := m.Called(searchType, searchTerm)
+
+	return args.Get(0).([]entity.Student), args.Error(1)
+}
+
+// func (s *StudentServiceImpl) SearchStudents(searchType, searchTerm string) ([]entity.Student, error) {
+// 	switch searchType {
+// 	case "name":
+// 		return s.repo.SearchStudentsByName(searchTerm)
+// 	case "id":
+// 		student, err := s.repo.SearchStudentsByID(searchTerm)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		return []entity.Student{*student}, nil
+// 	case "roomNumber":
+
+// 		return s.repo.SearchStudentsByRoomNumber(searchTerm)
+// 	default:
+// 		return nil, errors.New("Invalid search type")
+// 	}
+// }

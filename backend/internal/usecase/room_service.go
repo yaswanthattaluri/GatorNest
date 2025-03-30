@@ -11,7 +11,8 @@ type RoomUsecase interface {
     GetRooms() ([]entity.Room, error)
     JoinRoom(roomID uint, studentID uint) error
     GetRoomsByType(roomType string) ([]entity.Room, error)
-    DeleteRoomByNumber(roomNumber int) error  
+    // DeleteRoomByNumber(roomNumber int) error  
+    DeleteRoomByRoomNumber(roomNumber string) error  
 }
 
 
@@ -39,13 +40,8 @@ func (u *roomUsecase) CreateRoom(name, roomType string, vacancy int, price int, 
     return room, err
 }
 
-func (u *roomUsecase) DeleteRoomByNumber(roomNumber int) error {
-    room, err := u.roomRepo.GetRoomByNumber(roomNumber)
-    if room == nil || err != nil {
-        return errors.New("room not found")
-    }
-
-    return u.roomRepo.DeleteRoomByNumber(roomNumber)
+func (s *roomUsecase) DeleteRoomByRoomNumber(roomNumber string) error {
+    return s.roomRepo.DeleteRoomByRoomNumber(roomNumber)
 }
 
 

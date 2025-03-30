@@ -28,3 +28,9 @@ func (m *MockRoomUsecase) GetRoomsByType(roomType string) ([]entity.Room, error)
 	args := m.Called(roomType)
 	return args.Get(0).([]entity.Room), args.Error(1)
 }
+
+func (m *MockRoomUsecase) DeleteRoomByRoomNumber(roomNumber string) error  {
+	args := m.Called(roomNumber)
+	return args.Error(0)
+}
+
