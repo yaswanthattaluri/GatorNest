@@ -14,6 +14,127 @@ import (
 	"errors"
 )
 
+func TestSearchStudentsByName(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockStudentService)
+	handler := &StudentHandler{service: mockUsecase}
+
+	router := gin.Default()
+	router.GET("/students/search", handler.SearchStudents)
+
+	req, _ := http.NewRequest("GET", "/students/search?type=name&term=John", nil)
+	w := httptest.NewRecorder()
+
+	mockStudents := []entity.Student{
+		{ID: 1, Name: "John Doe", Age: 20},
+	}
+	mockUsecase.On("SearchStudents", "name", "John").Return(mockStudents, nil)
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestSearchStudentsByID(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockStudentService)
+	handler := &StudentHandler{service: mockUsecase}
+
+	router := gin.Default()
+	router.GET("/students/search", handler.SearchStudents)
+
+	req, _ := http.NewRequest("GET", "/students/search?type=id&term=1", nil)
+	w := httptest.NewRecorder()
+
+	mockStudent := entity.Student{ID: 1, Name: "John Doe", Age: 20}
+	mockUsecase.On("SearchStudents", "id", "1").Return([]entity.Student{mockStudent}, nil)
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestSearchStudentsByRoomNumber(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockStudentService)
+	handler := &StudentHandler{service: mockUsecase}
+
+	router := gin.Default()
+	router.GET("/students/search", handler.SearchStudents)
+
+	req, _ := http.NewRequest("GET", "/students/search?type=roomNumber&term=101", nil)
+	w := httptest.NewRecorder()
+
+	mockStudents := []entity.Student{
+		{ID: 1, Name: "John Doe", Age: 20},
+		{ID: 2, Name: "Jane Doe", Age: 22},
+	}
+	mockUsecase.On("SearchStudents", "roomNumber", "101").Return(mockStudents, nil)
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestSearchStudents_MissingParams(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockStudentService)
+	handler := &StudentHandler{service: mockUsecase}
+
+	router := gin.Default()
+	router.GET("/students/search", handler.SearchStudents)
+
+	req, _ := http.NewRequest("GET", "/students/search?type=name", nil)
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	mockUsecase.AssertNotCalled(t, "SearchStudents")
+}
+
+func TestSearchStudents_InvalidType(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockStudentService)
+	handler := &StudentHandler{service: mockUsecase}
+
+	router := gin.Default()
+	router.GET("/students/search", handler.SearchStudents)
+
+	req, _ := http.NewRequest("GET", "/students/search?type=invalid&term=John", nil)
+	w := httptest.NewRecorder()
+
+	mockUsecase.On("SearchStudents", "invalid", "John").Return(nil, errors.New("Invalid search type"))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestSearchStudents_ServerError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockStudentService)
+	handler := &StudentHandler{service: mockUsecase}
+
+	router := gin.Default()
+	router.GET("/students/search", handler.SearchStudents)
+
+	req, _ := http.NewRequest("GET", "/students/search?type=name&term=John", nil)
+	w := httptest.NewRecorder()
+
+	mockUsecase.On("SearchStudents", "name", "John").Return(nil, errors.New("Database error"))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+
 func TestCreateUser(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
