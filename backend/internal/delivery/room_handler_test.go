@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -110,5 +111,63 @@ func TestGetRoomsByType(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestDeleteRoom(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockRoomUsecase)
+	handler := NewRoomHandler(mockUsecase)
+
+	router := gin.Default()
+	router.DELETE("/rooms/:room_id", handler.DeleteRoom)
+
+	req, _ := http.NewRequest("DELETE", "/rooms/1", nil)
+	w := httptest.NewRecorder()
+
+	mockUsecase.On("DeleteRoom", uint(1)).Return(nil)
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+
+func TestDeleteRoom_NotFound(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockRoomUsecase)
+	handler := NewRoomHandler(mockUsecase)
+
+	router := gin.Default()
+	router.DELETE("/rooms/:room_id", handler.DeleteRoom)
+
+	req, _ := http.NewRequest("DELETE", "/rooms/999", nil)
+	w := httptest.NewRecorder()
+
+	mockUsecase.On("DeleteRoom", uint(999)).Return(errors.New("room not found"))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestDeleteRoom_ServerError(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockUsecase := new(usecase.MockRoomUsecase)
+	handler := NewRoomHandler(mockUsecase)
+
+	router := gin.Default()
+	router.DELETE("/rooms/:room_id", handler.DeleteRoom)
+
+	req, _ := http.NewRequest("DELETE", "/rooms/1", nil)
+	w := httptest.NewRecorder()
+
+	mockUsecase.On("DeleteRoom", uint(1)).Return(errors.New("internal server error"))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
 	mockUsecase.AssertExpectations(t)
 }
