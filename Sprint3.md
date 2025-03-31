@@ -114,16 +114,4 @@
 - No schema changes; used existing `Student` and `Room` models.
 - Auto migration handled in `config/database.go`.
 
----
-**Contributors:**
-- Backend: Meghana
-- Frontend: Pranaya, Sai
-
-**Sprint Completed:** March 31, 2025
-
-**Next Steps:**
-- Finalize maintenance complaint feature
-- Improve dashboard analytics for admins
-- Expand Cypress test coverage
-- Deploy to test server for QA and feedback
 
