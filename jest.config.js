@@ -1,11 +1,13 @@
 module.exports = {
-  setupFiles: ["<rootDir>/frontend/jest.polyfills.js"], // for TextEncoder
-  setupFilesAfterEnv: ["<rootDir>/frontend/jest.matchers.js"], // for jest-dom
-  testEnvironment: "jsdom",
-  transform: {
-    "^.+\\.(js|jsx)$": "babel-jest"
-  },
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: [
+    './frontend/jest.polyfills.js',
+    '@testing-library/jest-dom'
+  ],
   moduleNameMapper: {
-    "\\.(css|less|scss|sass)$": "<rootDir>/frontend/unittests/mocks/styleMock.js"
+    '\\.(css|less|scss|sass)$': '<rootDir>/frontend/unittests/mocks/styleMock.js'
+  },
+  transform: {
+    '^.+\\.(js|jsx)$': 'babel-jest'
   }
 };
