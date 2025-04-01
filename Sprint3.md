@@ -3,15 +3,15 @@
 ## 1. Summary of Work Completed
 
 ### Admin Functionalities
-- Implemented **Admin Login** with JWT authentication.
-- Developed **Room Management** APIs:
+- Implemented Admin Login with JWT authentication.
+- Developed Room Management APIs:
   - Add a room.
   - Delete a room by room number.
-- Created **Search Students** feature for admin:
+- Created Search Students feature for admin:
   - Search by name, ID, or room number.
 
 ### Student Functionalities
-- Developed **Find Roommate** functionality:
+- Developed Find Roommate functionality:
   - Students can find potential roommates based on gender and selected preferences.
   - Matched results displayed with relevant student details.
 
@@ -20,15 +20,18 @@
 - Added conditional button rendering based on login status.
 
 ### Additional Enhancements
-- Initial support for **Maintenance Request** feature:
+- Initial support for Maintenance Request feature:
   - Student can submit complaints (WIP).
   - Admin can view and mark them as resolved (planned).
+
+---
 
 ## 2. Backend API Documentation (Sprint 3 Additions)
 
 ### Admin APIs
+
 #### Admin Login
-- **URL:** `POST /api/admin/login`
+- **URL:** POST `/api/admin/login`
 - **Request Body:**
 ```json
 {
@@ -39,8 +42,8 @@
 - **Response:** JWT token
 
 #### Add Room
-- **URL:** `POST /api/rooms`
-- **Headers:** `Authorization: Bearer <admin_token>`
+- **URL:** POST `/api/rooms`
+- **Headers:** Authorization: Bearer `<admin_token>`
 - **Request Body:**
 ```json
 {
@@ -53,16 +56,16 @@
 ```
 
 #### Delete Room
-- **URL:** `DELETE /api/rooms/number/{room_number}`
-- **Headers:** `Authorization: Bearer <admin_token>`
+- **URL:** DELETE `/api/rooms/number/{room_number}`
+- **Headers:** Authorization: Bearer `<admin_token>`
 
 ### Student Search API
-- **URL:** `GET /api/students/search?type={name|id|roomNumber}&term={value}`
-- **Headers:** `Authorization: Bearer <admin_token>`
+- **URL:** GET `/api/students/search?type={name|id|roomNumber}&term={value}`
+- **Headers:** Authorization: Bearer `<admin_token>`
 - **Response:** List of matched students
 
 ### Roommate Matching
-- **URL:** `POST /api/students/match-roommates`
+- **URL:** POST `/api/students/match-roommates`
 - **Request Body:**
 ```json
 {
@@ -73,16 +76,22 @@
 ```
 - **Response:** List of matching students
 
+---
+
 ## 3. Backend Unit Tests
+
 - `admin_handler_test.go`: Tests for admin login and token generation
 - `room_handler_test.go`: Add room, delete room, get room by type
 - `user_handler_test.go`: Create user, Get users, Search students
-- Mock services:
+- **Mock services:**
   - `mock_admin_service.go`
   - `mock_room_service.go`
   - `mock_student_service.go`
 
+---
+
 ## 4. Frontend Enhancements
+
 ### Admin Pages
 - `ManageRooms.jsx`: UI for adding and deleting rooms
 - `SearchStudent.jsx`: Search interface with filters for name, ID, and room
@@ -94,13 +103,47 @@
 
 ### Frontend Improvements
 - Navigation buttons conditionally rendered based on login type
-- State management for tokens and roles in `localStorage`
+- State management for tokens and roles in localStorage
+
+---
 
 ## 5. Frontend Cypress Tests
-- `auth.cy.js`: Validates admin login
-- `pages.cy.js`: Validates room management and roommate finder UI
 
-## 6. Commit Summary
+### `auth.cy.js`
+- Validates admin login
+
+### `pages.cy.js`
+- Validates room management and roommate finder UI
+
+### `roomfinder.cy.js`
+- **Flat Types Display:** Verifies all flat types render
+- **Flat Type Selection:** Details shown after selecting
+- **Interactive Options:** Ensures clicking works
+
+### `roommate-matching.cy.js`
+- **Preference Display & Form:** Verifies preference inputs are rendered
+
+---
+
+## 6. Frontend Unit Test Summary
+
+### `SearchStudent`
+- Tests search form rendering, API call handling, error display, and clearing
+- Validates all 3 search types (name, ID, roomNumber)
+
+### `ManageRooms`
+- Tests Add/Delete form UI, fetch handling, and error alerts
+- Verifies correct data sent to backend
+
+### `FindRoommates`
+- Tests loading state, data fetching, filter logic, clearing filters, error handling, and favorite toggle
+
+### `StaffLogin`
+- Tests form UI, fetch calls, and invalid credential handling
+
+---
+
+## 7. Commit Summary
 - Admin login backend and frontend UI
 - Admin APIs for room add/delete
 - Enhanced room handler tests and coverage
@@ -110,8 +153,9 @@
 - Refactored `ManageRooms.jsx` and added interactive feedback
 - Roommate matching algorithm implemented on backend
 
-## 7. Database
-- No schema changes; used existing `Student` and `Room` models.
-- Auto migration handled in `config/database.go`.
+---
 
+## 8. Database
+- No schema changes; used existing Student and Room models
+- Auto migration handled in `config/database.go`
 
