@@ -13,6 +13,7 @@ import FindRoommate from "./pages/FindRoommate";
 import ManageRooms from "./pages/ManageRooms";
 import SearchStudent from "./pages/SearchStudent";
 import Maintenance from "./pages/Maintenance";
+import MaintenanceAdmin from "./pages/ViewMaintenanceRequests";
 
 
 // Fixed App component - removed Router since it's already in main.jsx
@@ -32,7 +33,8 @@ const App = () => {
       <Route path="/managerooms" element={<ManageRooms />} />
       <Route path="/managestudents" element={<SearchStudent />} />
       <Route path="/maintenancerequest" element={<Maintenance />} />
-      
+      <Route path="/maintenanceinbox" element={<MaintenanceAdmin />} />
+
     </Routes>
   );
 };

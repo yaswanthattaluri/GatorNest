@@ -209,3 +209,68 @@
     border-collapse: collapse;
   }
   
+  .submit-btn.small {
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #007acc;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .submit-btn.small:hover {
+    background-color: #005fa3;
+  }
+  
+  /* Pencil-only mode for technician notes */
+.icon-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.icon-button:hover {
+  color: #005f99;
+}
+
+.note-input {
+  width: 180px;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.note-input:focus {
+  border-color: #005f99;
+  box-shadow: 0 0 0 2px rgba(0, 95, 159, 0.1);
+  outline: none;
+}
+
+.save-msg {
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.save-msg.success {
+  color: green;
+}
+
+.save-msg.error {
+  color: red;
+}
+.page-message {
+  margin-bottom: 15px;
+  font-weight: 500;
+  padding: 10px 16px;
+  background-color: #f0f9ff;
+  border-left: 4px solid #007acc;
+  color: #00497a;
+  border-radius: 4px;
+}

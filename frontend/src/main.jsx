@@ -203,6 +203,16 @@ function MainApp() {
                 Manage Rooms
               </a>
               <a
+                href="/maintenanceinbox"
+                style={{
+                  color: "white",
+                  textDecoration: "none",
+                  fontSize: "18px",
+                }}
+              >
+                View Maintenance Requests
+              </a>
+              <a
                 href="/"
                 onClick={handleStaffLogout}
                 style={{
