@@ -12,6 +12,7 @@ import FloatingWidget from "./pages/FloatingWidget";
 import FindRoommate from "./pages/FindRoommate";
 import ManageRooms from "./pages/ManageRooms";
 import SearchStudent from "./pages/SearchStudent";
+import Maintenance from "./pages/Maintenance";
 
 
 // Fixed App component - removed Router since it's already in main.jsx
@@ -30,6 +31,8 @@ const App = () => {
       <Route path="/findroommate" element={<FindRoommate />} />
       <Route path="/managerooms" element={<ManageRooms />} />
       <Route path="/managestudents" element={<SearchStudent />} />
+      <Route path="/maintenancerequest" element={<Maintenance />} />
+      
     </Routes>
   );
 };

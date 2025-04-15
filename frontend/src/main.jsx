@@ -239,6 +239,16 @@ function MainApp() {
                 Find Roommate
               </a>
               <a
+                href="/maintenancerequest"
+                style={{
+                  color: "white",
+                  textDecoration: "none",
+                  fontSize: "18px",
+                }}
+              >
+                Maintenance Request
+              </a>
+              <a
                 href="/faq"
                 style={{
                   color: "white",
