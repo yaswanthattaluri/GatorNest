@@ -39,8 +39,6 @@ func main() {
 	roomUsecase := usecase.NewRoomUsecase(roomRepo, studentRepo)
 	roomHandler := delivery.NewRoomHandler(roomUsecase)
 
-	
-
 	// Public Routes
 	r.POST("/api/student/register", studentHandler.CreateUser)
 	r.POST("/api/student/login", studentHandler.LoginUser)
@@ -79,6 +77,19 @@ func main() {
 		adminRoutes.POST("/register", adminHandler.RegisterAdmin)
 		adminRoutes.POST("/login", adminHandler.LoginAdmin)
 		adminRoutes.GET("/all", adminHandler.GetAllAdmins)
+	}
+
+	//maintenance routes
+	maintenanceRepo := repository.NewMaintenanceRepository(config.DB)
+	maintenanceService := usecase.NewMaintenanceService(maintenanceRepo)
+	maintenanceHandler := delivery.NewMaintenanceHandler(maintenanceService)
+
+	r.POST("/api/maintenance-requests", maintenanceHandler.SubmitRequest)
+
+	maintenance := r.Group("/api/maintenance-requests")
+	{
+		maintenance.GET("", maintenanceHandler.GetAllRequests)
+		maintenance.PUT("/:id", maintenanceHandler.UpdateMaintenanceRequest)
 	}
 
 	r.Run(":8080")

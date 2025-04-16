@@ -3,7 +3,7 @@ import { Pencil } from "lucide-react";
 import "../styles/Maintenance.css";
 
 const AdminMaintenancePanel = () => {
-  const [requests, setRequests] = useState([]); // Now empty at start
+  const [requests, setRequests] = useState([]);
   const [filter, setFilter] = useState("New");
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [tempNote, setTempNote] = useState("");
@@ -11,19 +11,21 @@ const AdminMaintenancePanel = () => {
   const [pageMessage, setPageMessage] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch from API on load
   useEffect(() => {
-    fetch("/api/maintenance-requests")
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchRequests = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/maintenance-requests");
+        if (!response.ok) throw new Error("Failed to fetch requests");
+        const data = await response.json();
         setRequests(data);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching maintenance requests:", err);
-        setPageMessage("Failed to load maintenance requests.");
+      } catch (err) {
+        console.error("Failed to load maintenance requests:", err);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchRequests();
   }, []);
 
   const handleFieldEdit = (id, field, value) => {
@@ -45,7 +47,7 @@ const AdminMaintenancePanel = () => {
     setPageMessage("Saving...");
 
     try {
-      const response = await fetch(`/api/maintenance-requests/${id}`, {
+      const response = await fetch(`http://localhost:8080/api/maintenance-requests/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -57,8 +59,9 @@ const AdminMaintenancePanel = () => {
 
       if (!response.ok) throw new Error("Failed to save");
 
+      const savedRequest = await response.json();
       setRequests((prev) =>
-        prev.map((req) => (req.id === id ? { ...req, ...updated, completed: updatedDate } : req))
+        prev.map((req) => (req.id === id ? savedRequest : req))
       );
 
       setEditedRequests((prev) => {
@@ -116,15 +119,15 @@ const AdminMaintenancePanel = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredRequests.length ? (
+                  {filteredRequests.length > 0 ? (
                     filteredRequests.map((req) => (
                       <tr key={req.id}>
-                        <td>{req.roomNumber}</td>
+                        <td>{req.room_number}</td>
                         <td>{req.name}</td>
                         <td>{req.priority}</td>
                         <td>{req.category}</td>
-                        <td>{req.subCategory}</td>
-                        <td>{req.permissionToEnter}</td>
+                        <td>{req.sub_category}</td>
+                        <td>{req.permission_to_enter}</td>
                         <td>{req.description}</td>
                         <td>
                           {editingNoteId === req.id ? (
@@ -143,7 +146,7 @@ const AdminMaintenancePanel = () => {
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                               <span style={{ maxWidth: "160px", overflowWrap: "break-word" }}>
                                 {editedRequests[req.id]?.technicianNotes ||
-                                  req.technicianNotes ||
+                                  req.technician_notes ||
                                   "—"}
                               </span>
                               <button
@@ -152,7 +155,7 @@ const AdminMaintenancePanel = () => {
                                   setEditingNoteId(req.id);
                                   setTempNote(
                                     editedRequests[req.id]?.technicianNotes ??
-                                      req.technicianNotes
+                                      req.technician_notes
                                   );
                                 }}
                               >

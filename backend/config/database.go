@@ -21,7 +21,7 @@ func ConnectDatabase() {
 	DB = database
 
 	// Auto-migrate with new fields
-	err = DB.AutoMigrate(&entity.Student{}, &entity.Room{}, &entity.Admin{})
+	err = DB.AutoMigrate(&entity.Student{}, &entity.Room{}, &entity.Admin{}, &entity.MaintenanceRequest{})
 
 	if err != nil {
 		panic("Failed to migrate database!")

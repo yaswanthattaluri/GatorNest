@@ -31,7 +31,7 @@ const MaintenanceHistory = ({ requests }) => {
                     <td>{req.description}</td>
                     <td>{req.status}</td>
                     <td>{req.completed}</td>
-                    <td>{req.technicianNotes}</td>
+                    <td>{req.technician_notes}</td>
                   </tr>
                 ))
               ) : (

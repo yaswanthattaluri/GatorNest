@@ -33,11 +33,15 @@ const Maintenance = () => {
   };
 
   useEffect(() => {
-    fetch("/api/maintenance-requests")
-      .then((res) => res.json())
+    fetch("http://localhost:8080/api/maintenance-requests") 
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch requests");
+        return res.json();
+      })
       .then((data) => setRequests(data))
       .catch((err) => console.error("Failed to load maintenance requests:", err));
   }, []);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,24 +54,18 @@ const Maintenance = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     const newRequest = {
-        id: Math.floor(Math.random() * 100000),
-        date: new Date().toLocaleDateString(),
-        name: form.name,
-        roomNumber: form.roomNumber,
-        category: form.category,
-        description: form.description,
-        priority: form.priority,
-        subCategory: form.subCategory,
-        permissionToEnter: form.permissionToEnter,
-        status: "Pending",
-        completed: "-",
-        technicianNotes: "-",
+      name: form.name,
+      room_number: form.roomNumber,
+      category: form.category,
+      description: form.description,
+      priority: form.priority,
+      sub_category: form.subCategory,
+      permission_to_enter: form.permissionToEnter,
     };
-
-    // Simulate saving to database (replace with real POST request)
-    fetch("/api/maintenance-requests", {
+  
+    fetch("http://localhost:8080/api/maintenance-requests", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newRequest),
@@ -79,15 +77,14 @@ const Maintenance = () => {
       .then((savedRequest) => {
         setRequests((prev) => [...prev, savedRequest]);
         setForm({
-            name: "",
-            roomNumber: "",
-            priority: "",
-            category: "",
-            subCategory: "",
-            description: "",
-            permissionToEnter: "No",
-          });
-          
+          name: "",
+          roomNumber: "",
+          priority: "",
+          category: "",
+          subCategory: "",
+          description: "",
+          permissionToEnter: "No",
+        });
         alert("Request submitted successfully.");
       })
       .catch((err) => {
@@ -95,6 +92,7 @@ const Maintenance = () => {
         alert("Submission failed. Please check your backend or try again.");
       });
   };
+  
 
   return (
     <div className="manage-maintenance-wrapper wider-table-wrapper">
