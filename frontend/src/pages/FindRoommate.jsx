@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/FindRoommate.css"; 
+import React from "react";
+
 
 function FindRoommate() {
   const [studentProfiles, setStudentProfiles] = useState([]);
