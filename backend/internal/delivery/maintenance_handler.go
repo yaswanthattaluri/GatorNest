@@ -22,7 +22,7 @@ func (h *MaintenanceHandler) SubmitRequest(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	request.Status = "Pending"
+	request.Status = "New"
 	request.Completed = "-"
 	request.TechnicianNotes = "-"
 
