@@ -1,57 +1,48 @@
-// cypress/e2e/roomfinder.cy.js
 /// <reference types="cypress" />
 
-/* eslint-disable no-undef */
-
-describe('RoomFinder Tests', () => {
-    beforeEach(() => {
-      // Navigate to the roomfinder page before each test
-      cy.visit('/roomfinder');
-      // Wait for page to load properly
-      cy.get('body').should('be.visible');
-    });
-  
-    it('should display all flat types', () => {
-      cy.contains('Select Your Flat Type').should('be.visible');
-      cy.contains('1B1B').should('be.visible');
-      cy.contains('2B2B').should('be.visible');
-      cy.contains('3B3B').should('be.visible');
-    });
-  
-    it('should show some details when a flat type is selected', () => {
-      // Click on the 1B1B option
-      cy.contains('1B1B').click();
-      
-      // Since the specific elements weren't found, let's just check that clicking
-      // doesn't cause an error and that 1B1B text exists on the page
-      cy.contains('1B1B').should('exist');
-      
-      // Simply check the URL - this is a minimal test that just verifies clicking works
-      cy.url().should('include', '/roomfinder');
-    });
-  
-    it('should have interactive flat type options', () => {
-      // Just test that clicking works
-      cy.contains('1B1B').click();
-      
-      // Test visual indication that it was clicked - using a simpler approach
-      cy.contains('1B1B').then($el => {
-        // At least check that the element exists and is visible
-        expect($el).to.exist;
-        expect($el).to.be.visible;
-      });
-      
-      // Try clicking another option
-      cy.contains('2B2B').click();
-      cy.contains('2B2B').should('be.visible');
-    });
-  
-    // Skip the API-dependent tests
-    it.skip('should show available rooms when a flat type is selected', () => {
-      // Original test code
-    });
-  
-    it.skip('should allow booking a room', () => {
-      // Original test code
-    });
+describe("RoomFinder Tests", () => {
+  beforeEach(() => {
+    cy.visit("/roomfinder");
+    cy.get("body").should("be.visible");
   });
+
+  it("should display all flat types", () => {
+    cy.contains("Select Your Flat Type").should("be.visible");
+    cy.contains("1B1B").should("be.visible");
+    cy.contains("2B2B").should("be.visible");
+    cy.contains("3B3B").should("be.visible");
+  });
+
+  it("should display room table for 1B1B", () => {
+    cy.contains("1B1B").click();
+    cy.contains("Room Details for 1B1B").should("exist");
+    cy.get("table").should("exist");
+    cy.get("td").contains("7075").should("exist");
+  });
+
+  it("should display room table for 2B2B", () => {
+    cy.contains("2B2B").click();
+    cy.contains("Room Details for 2B2B").should("exist");
+    cy.get("table").should("exist");
+    cy.get("td").contains("1234").should("exist");
+  });
+
+  it("should display room table for 3B3B", () => {
+    cy.contains("3B3B").click();
+    cy.contains("Room Details for 3B3B").should("exist");
+    cy.get("table").should("exist");
+    cy.get("td").contains("120").should("exist");
+  });
+
+  it("should simulate clicking 'I am Interested' and validate mailto link", () => {
+    cy.contains("1B1B").click();
+    cy.get("button").contains("I am Interested").first().click();
+
+    cy.get('[data-testid="mailto-link"]')
+      .should("exist")
+      .invoke("attr", "href")
+      .should("include", "mailto:")
+      .and("include", "Room 7075")
+      .and("include", "admin@gatornest.com");
+  });
+});
