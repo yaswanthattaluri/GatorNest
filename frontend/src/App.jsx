@@ -14,6 +14,7 @@ import ManageRooms from "./pages/ManageRooms";
 import SearchStudent from "./pages/SearchStudent";
 import Maintenance from "./pages/Maintenance";
 import MaintenanceAdmin from "./pages/ViewMaintenanceRequests";
+import StudentPayment from "./pages/StudentPayment";
 
 
 // Fixed App component - removed Router since it's already in main.jsx
@@ -34,6 +35,7 @@ const App = () => {
       <Route path="/managestudents" element={<SearchStudent />} />
       <Route path="/maintenancerequest" element={<Maintenance />} />
       <Route path="/maintenanceinbox" element={<MaintenanceAdmin />} />
+      <Route path="/payments" element={<StudentPayment />} />
 
     </Routes>
   );
