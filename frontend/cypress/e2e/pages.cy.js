@@ -5,7 +5,6 @@ describe('Page Loading Tests', () => {
     
     // Check that key elements are present
     cy.contains('Welcome to GatorNest').should('be.visible');
-    cy.contains('Explore Rooms').should('be.visible');
     cy.contains('Explore Our Dorms & Amenities').should('be.visible');
     
     // Test navigation menu

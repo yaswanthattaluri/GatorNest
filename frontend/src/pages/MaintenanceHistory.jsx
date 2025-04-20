@@ -13,12 +13,11 @@ const MaintenanceHistory = ({ requests }) => {
             <thead>
               <tr>
                 <th>Request #</th>
-                <th>Date</th>
                 <th>Category</th>
                 <th>Description</th>
                 <th>Status</th>
                 <th>Date Completed</th>
-                <th>Technician Notes</th>
+                <th className="tech-notes">Technician Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -26,17 +25,17 @@ const MaintenanceHistory = ({ requests }) => {
                 requests.map((req, index) => (
                   <tr key={index}>
                     <td>{req.id}</td>
-                    <td>{req.date}</td>
                     <td>{req.category}</td>
                     <td>{req.description}</td>
                     <td>{req.status}</td>
                     <td>{req.completed}</td>
-                    <td>{req.technician_notes}</td>
+                    <td className="tech-notes" style={{ maxWidth: "200px", wordBreak: "break-word", overflowWrap: "anywhere", whiteSpace: "normal" }}>
+  {req.technician_notes}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="text-center">
+                  <td colSpan={6} className="text-center">
                     No maintenance requests found.
                   </td>
                 </tr>
@@ -53,12 +52,11 @@ MaintenanceHistory.propTypes = {
   requests: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      date: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired,
       completed: PropTypes.string.isRequired,
-      technicianNotes: PropTypes.string.isRequired,
+      technician_notes: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

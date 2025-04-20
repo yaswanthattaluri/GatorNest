@@ -1,227 +1,224 @@
-/* --- Maintenance.css (UPDATED) --- */
-
 .manage-maintenance-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 20px;
-    background-color: #f4f7f6;
-    overflow-y: auto;
-  }
-  
-  .manage-maintenance-container {
-    width: 100%;
-    max-width: 1200px;
-    background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    height: auto;
-  }
-  
-  .action-selector {
-    display: flex;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .action-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 15px;
-    background-color: #f0f0f0;
-    border: none;
-    color: #666;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  
-  .action-btn .btn-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .action-btn:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .action-btn.active {
-    background-color: #005f99;
-    color: white;
-  }
-  
-  .form-section {
-    padding: 30px;
-    flex-grow: 1;
-    overflow: visible;
-  }
-  
-  .form-title {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: 600;
-  }
-  
-  .input-group {
-    margin-bottom: 20px;
-  }
-  
-  .input-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #555;
-    font-weight: 500;
-  }
-  
-  .form-input,
-  .input-group select,
-  .input-group textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-  }
-  
-  .input-group textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .card {
-    height: auto;
-    overflow: visible;
-    width: 100%;
-  }
-  
-  .form-input:focus,
-  .input-group select:focus,
-  .input-group textarea:focus {
-    outline: none;
-    border-color: #005f99;
-    box-shadow: 0 0 0 3px rgba(0, 95, 159, 0.1);
-  }
-  
-  .submit-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: #ffa500;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-btn:hover {
-    background-color: #ff8c00;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f4f7f6;
+  overflow-y: auto;
+}
+
+.manage-maintenance-container {
+  width: 100%;
+  max-width: 1200px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.action-selector {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border: none;
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-btn .btn-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.action-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.action-btn.active {
+  background-color: #005f99;
+  color: white;
+}
+
+.form-section {
+  padding: 30px;
+  flex-grow: 1;
+  overflow: visible;
+}
+
+.form-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.card {
+  height: auto;
+  width: 90%;
+}
+
+.form-input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #005f99;
+  box-shadow: 0 0 0 3px rgba(0, 95, 159, 0.1);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #ffa500;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #ff8c00;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.input-group.full-span {
+  grid-column: 1 / -1;
+}
+
+.input-group.full-span textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 100px;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 600px) {
   .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    grid-template-columns: 1fr;
   }
-  
+
   .input-group.full-span {
-    grid-column: 1 / -1;
+    grid-column: span 1;
   }
-  
-  .input-group.full-span textarea {
-    width: 100%;
-    box-sizing: border-box;
-    resize: vertical;
-    min-height: 100px;
-    max-width: 100%;
-    overflow-wrap: break-word;
-  }
-  
-  @media (max-width: 600px) {
-    .form-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .input-group.full-span {
-      grid-column: span 1;
-    }
-  }
-  
-  .table-scroll-wrapper {
-    width: 100%;
-    overflow-x: hidden;
-    padding-bottom: 20px;
-  }
-  
-  .maintenance-container {
-    width: 100%;
-    overflow: visible;
-  }
-  
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-  }
-  
-  .custom-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
-    text-align: left;
-    table-layout: fixed;
-  }
-  
-  .custom-table th,
-  .custom-table td {
-    padding: 12px;
-    border: 1px solid #ccc;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-  }
-  
-  .custom-table th {
-    background-color: #004080;
-    color: white;
-  }
-  
-  .custom-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .custom-table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .full-width-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .submit-btn.small {
-    padding: 6px 12px;
-    font-size: 14px;
-    background-color: #007acc;
-    border-radius: 6px;
-    font-weight: 500;
-    margin-top: 2px;
-  }
-  .submit-btn.small:hover {
-    background-color: #005fa3;
-  }
-  
-  /* Pencil-only mode for technician notes */
+}
+
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+  padding-bottom: 20px;
+}
+
+.maintenance-container {
+  width: 100%;
+  overflow: visible;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  text-align: left;
+  table-layout: fixed;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.custom-table th {
+  background-color: #004080;
+  color: white;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.full-width-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.submit-btn.small {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #007acc;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.submit-btn.small:hover {
+  background-color: #005fa3;
+}
+
+/* Pencil-only mode for technician notes */
 .icon-button {
   background: transparent;
   border: none;
@@ -265,6 +262,7 @@
 .save-msg.error {
   color: red;
 }
+
 .page-message {
   margin-bottom: 15px;
   font-weight: 500;
@@ -273,4 +271,19 @@
   border-left: 4px solid #007acc;
   color: #00497a;
   border-radius: 4px;
+}
+
+.custom-table .tech-notes {
+  max-width: 200px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .custom-table .tech-notes {
+    max-width: 120px;
+  }
 }

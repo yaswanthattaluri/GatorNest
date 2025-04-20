@@ -4,6 +4,10 @@ import dormRoom from "../assets/cleanroom.png";
 import gatorStatue from "../assets/ufp3.jpg";
 import studyLounge from "../assets/studyspace.jpeg";
 import laundryRoom from "../assets/laundry.jpeg";
+import React, { useEffect, useState } from "react";
+
+
+
 //import campusHero from "../assets/ufp1.jpg";
 
 import "../styles/HomePage.css";
@@ -11,6 +15,16 @@ import "../styles/HomePage.css";
 const HomePage = () => {
   const navigate = useNavigate(); // React Router navigation
 
+  const [isStudent, setIsStudent] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const isStaff = localStorage.getItem("isStaff");
+
+    if (token && isStaff !== "true") {
+      setIsStudent(true);
+    }
+  }, []);
   return (
     <div className="homepage-container">
       {/* Hero Section */}
@@ -18,9 +32,11 @@ const HomePage = () => {
         <div className="hero-content">
           <h1>Welcome to GatorNest</h1>
           <p>Experience premium student living at the heart of the University of Florida.</p>
+          {isStudent && (
           <button className="cta-button" onClick={() => navigate('/roomfinder')}>
             Explore Rooms
           </button>
+          )}
         </div>
         
       </section>
