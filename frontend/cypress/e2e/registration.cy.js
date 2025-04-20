@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+// <reference types="cypress" />
 
 describe('Student Registration Page', () => {
   beforeEach(() => {
@@ -39,16 +39,18 @@ describe('Student Registration Page', () => {
     cy.get('button[type="submit"]').click();
 
     // Wait for request and assert
-    cy.wait('@registerStudent').its('request.body').should((body) => {
-      expect(body).to.include({
+    cy.wait('@registerStudent').then((interception) => {
+      // Assert on the request body directly with expect
+      expect(interception.request.body).to.deep.equal({
         name: 'Test Student',
         email: 'test@student.com',
         phone: '1234567890',
         dorm_preference: '2B2B',
-        password: 'securepassword',
+        password: 'securepassword'
       });
     });
 
+    // Check if alert was called with the correct message
     cy.get('@alertStub').should('have.been.calledWith', 'Registration successful for Test Student!');
   });
 });
