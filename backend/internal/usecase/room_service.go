@@ -1,83 +1,97 @@
 package usecase
 
 import (
-    "backend/internal/entity"
-    "backend/internal/repository"
-    "errors"
+	"backend/internal/entity"
+	"backend/internal/repository"
+	"time"
 )
 
-type RoomUsecase interface {
-    CreateRoom(name, roomType string, vacancy int, price int, roomNumber int) (*entity.Room, error)
-    GetRooms() ([]entity.Room, error)
-    JoinRoom(roomID uint, studentID uint) error
-    GetRoomsByType(roomType string) ([]entity.Room, error)
-    // DeleteRoomByNumber(roomNumber int) error  
-    DeleteRoomByRoomNumber(roomNumber string) error  
+type RoomService interface {
+	CreateRoom(room *entity.Room) error
+	GetAllRooms() ([]entity.Room, error)
+	GetRoomByID(id uint) (*entity.Room, error)
+	GetRoomByNumber(roomNumber string) (*entity.Room, error)
+	JoinRoom(roomID uint, studentID uint) error
+	GetRooms() ([]entity.Room, error)
+	GetRoomsByType(roomType string) ([]entity.Room, error)
+	// DeleteRoomByNumber(roomNumber int) error
+	DeleteRoomByRoomNumber(roomNumber string) error
 }
 
-
-
-type roomUsecase struct {
-    roomRepo   repository.RoomRepository
-    studentRepo repository.StudentRepository
+type roomService struct {
+	repo        repository.RoomRepository
+	studentRepo repository.StudentRepository
+	paymentRepo repository.PaymentRepository
 }
 
-func NewRoomUsecase(roomRepo repository.RoomRepository, studentRepo repository.StudentRepository) RoomUsecase {
-    return &roomUsecase{roomRepo: roomRepo, studentRepo: studentRepo}
+func NewRoomService(repo repository.RoomRepository, studentRepo repository.StudentRepository, paymentRepo repository.PaymentRepository) RoomService {
+	return &roomService{
+		repo:        repo,
+		studentRepo: studentRepo,
+		paymentRepo: paymentRepo,
+	}
 }
 
-
-
-func (u *roomUsecase) CreateRoom(name, roomType string, vacancy int, price int, roomNumber int) (*entity.Room, error) {
-    room := &entity.Room{
-        Name:       name,
-        Type:       roomType,
-        Vacancy:    vacancy,
-        Price:      price,     
-        RoomNumber: roomNumber,  
-    }
-    err := u.roomRepo.CreateRoom(room)
-    return room, err
+func (s *roomService) CreateRoom(room *entity.Room) error {
+	return s.repo.CreateRoom(room)
 }
 
-func (s *roomUsecase) DeleteRoomByRoomNumber(roomNumber string) error {
-    return s.roomRepo.DeleteRoomByRoomNumber(roomNumber)
+func (s *roomService) GetAllRooms() ([]entity.Room, error) {
+	return s.repo.GetRooms()
 }
 
-
-func (u *roomUsecase) GetRooms() ([]entity.Room, error) {
-    return u.roomRepo.GetRooms()
+func (s *roomService) GetRoomByID(id uint) (*entity.Room, error) {
+	return s.repo.GetRoomByID(id)
 }
 
-func (u *roomUsecase) JoinRoom(roomID uint, studentID uint) error {
-    room, err := u.roomRepo.GetRoomByID(roomID)
-    if err != nil {
-        return err
-    }
-
-    if room.Vacancy <= 0 {
-        return errors.New("room is full")
-    }
-
-    student, err := u.studentRepo.GetStudentByID(studentID)
-    if err != nil {
-        return errors.New("student does not exist")
-    }
-
-    if student.RoomID != nil {
-        return errors.New("student is already in a room")
-    }
-
-    student.RoomID = &roomID
-    room.Vacancy--
-
-    if err := u.studentRepo.UpdateStudent(student); err != nil {
-        return err
-    }
-
-    return u.roomRepo.UpdateRoom(room)
+func (s *roomService) GetRoomByNumber(roomNumber string) (*entity.Room, error) {
+	return s.repo.GetRoomByNumber(roomNumber)
 }
 
-func (u *roomUsecase) GetRoomsByType(roomType string) ([]entity.Room, error) {
-    return u.roomRepo.FindRoomsByType(roomType)
+func (s *roomService) JoinRoom(roomID uint, studentID uint) error {
+	// Get the room first to get its price
+	room, err := s.repo.GetRoomByID(roomID)
+	if err != nil {
+		return err
+	}
+
+	// Get the student to update their pending dues
+	student, err := s.studentRepo.GetByID(studentID)
+	if err != nil {
+		return err
+	}
+
+	// Add room price to student's pending dues
+	newPendingDues := student.PendingDues + room.Price
+	if err := s.studentRepo.UpdatePendingDues(studentID, newPendingDues); err != nil {
+		return err
+	}
+
+	// Create a new payment record
+	payment := &entity.Payment{
+		StudentID: studentID,
+		Amount:    room.Price,
+		Status:    "Pending",
+		Date:      time.Now(),
+	}
+
+	// Save the payment record
+	if err := s.paymentRepo.Create(payment); err != nil {
+		return err
+	}
+
+	// Join the room
+	return s.repo.JoinRoom(roomID, studentID)
+}
+
+func (u *roomService) GetRooms() ([]entity.Room, error) {
+	return u.repo.GetRooms()
+}
+
+func (u *roomService) GetRoomsByType(roomType string) ([]entity.Room, error) {
+	return u.repo.FindRoomsByType(roomType)
+}
+
+func (s *roomService) DeleteRoomByRoomNumber(roomNumber string) error {
+	return s.repo.DeleteRoomByRoomNumber(roomNumber)
 }

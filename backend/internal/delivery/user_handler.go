@@ -10,7 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte("secretKey123")
+var jwtSecret = []byte("secret")
 
 type StudentHandler struct {
 	service usecase.StudentService
@@ -156,21 +156,36 @@ func (h *StudentHandler) GetFilteredStudents(c *gin.Context) {
 	c.JSON(http.StatusOK, studentResponses)
 }
 
-
 func (h *StudentHandler) SearchStudents(c *gin.Context) {
-    searchType := c.Query("type")  // name, studentId, or roomNumber
-    searchTerm := c.Query("term")
+	searchType := c.Query("type") // name, studentId, or roomNumber
+	searchTerm := c.Query("term")
 
-    if searchType == "" || searchTerm == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Both 'type' and 'term' query parameters are required"})
-        return
-    }
+	if searchType == "" || searchTerm == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Both 'type' and 'term' query parameters are required"})
+		return
+	}
 
-    students, err := h.service.SearchStudents(searchType, searchTerm)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching student records"})
-        return
-    }
+	students, err := h.service.SearchStudents(searchType, searchTerm)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching student records"})
+		return
+	}
 
-    c.JSON(http.StatusOK, students)
+	c.JSON(http.StatusOK, students)
+}
+
+func (h *StudentHandler) GetPendingDues(c *gin.Context) {
+	studentID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	pendingDues, err := h.service.GetPendingDues(studentID.(uint))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get pending dues"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"pending_dues": pendingDues})
 }

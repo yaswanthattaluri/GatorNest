@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"backend/internal/entity"
+
 	"github.com/stretchr/testify/mock"
 )
 
@@ -29,11 +30,26 @@ func (m *MockStudentService) UpdateProfile(id uint, profileData entity.Student) 
 	return args.Error(0)
 }
 
+func (m *MockStudentService) GetStudentByID(id uint) (*entity.Student, error) {
+	args := m.Called(id)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*entity.Student), args.Error(1)
+}
 
-
-func(m *MockStudentService) SearchStudents(searchType, searchTerm string) ([]entity.Student, error){
+func (m *MockStudentService) SearchStudents(searchType, searchTerm string) ([]entity.Student, error) {
 	args := m.Called(searchType, searchTerm)
 
+	return args.Get(0).([]entity.Student), args.Error(1)
+}
+func (m *MockStudentService) GetPendingDues(studentID uint) (float64, error) {
+	args := m.Called(studentID)
+	return args.Get(0).(float64), args.Error(1)
+}
+
+func (m *MockStudentService) GetFilteredStudents(gender, preference, foodPreference string) ([]entity.Student, error) {
+	args := m.Called(gender, preference, foodPreference)
 	return args.Get(0).([]entity.Student), args.Error(1)
 }
 

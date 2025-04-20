@@ -5,40 +5,78 @@ import "../styles/StudentPayment.css";
 
 const StudentPayment = () => {
   const navigate = useNavigate();
-  const [balance, setBalance] = useState(1250.00);
+  const [balance, setBalance] = useState(null);
   const [isPaying, setIsPaying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationType, setNotificationType] = useState("");
-  const [paymentHistory, setPaymentHistory] = useState([
-    { id: 1, date: "2023-10-15", amount: 1250.00, status: "Completed" },
-    { id: 2, date: "2023-09-15", amount: 1250.00, status: "Completed" }
-  ]);
-  
+  const [paymentHistory, setPaymentHistory] = useState([]);
+
   const [paymentForm, setPaymentForm] = useState({
     cardName: "",
     cardNumber: "",
     expiryDate: "",
     cvv: "",
-    amount: balance
+    amount: 0
   });
 
-  // Check if student is logged in
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/studentlogin");
+      return;
     }
+
+    const fetchPendingDues = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/student/pending-dues", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch pending dues");
+        }
+
+        const data = await response.json();
+        setBalance(data.pending_dues);
+      } catch (err) {
+        console.error("Error fetching pending dues:", err);
+        showNotificationMessage("Failed to load balance", "error");
+      }
+    };
+
+    const fetchPaymentHistory = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/payments/student/1", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setPaymentHistory(data);
+      } catch (err) {
+        console.error("Error fetching payment history:", err);
+        showNotificationMessage("Failed to fetch payment history", "error");
+      }
+    };
+
+    fetchPendingDues();
+    fetchPaymentHistory();
   }, [navigate]);
 
-  // Format credit card number with spaces
   const formatCardNumber = (value) => {
-    // Remove all non-digits
     const cleaned = value.replace(/\D/g, '');
-    // Limit to 16 digits
     const limited = cleaned.slice(0, 16);
-    // Format with spaces
     let formatted = '';
     for (let i = 0; i < limited.length; i++) {
       if (i > 0 && i % 4 === 0) {
@@ -49,33 +87,24 @@ const StudentPayment = () => {
     return formatted;
   };
 
-  // Format expiry date as MM/YY
   const formatExpiryDate = (value) => {
-    // Remove all non-digits
     const cleaned = value.replace(/\D/g, '');
-    // Limit to 4 digits
     const limited = cleaned.slice(0, 4);
-    // Format with slash
     if (limited.length > 2) {
       return limited.slice(0, 2) + '/' + limited.slice(2);
     }
     return limited;
   };
 
-  // Format CVV (limit to 3 or 4 digits)
   const formatCVV = (value) => {
-    // Remove all non-digits
     const cleaned = value.replace(/\D/g, '');
-    // Limit to 4 digits (some cards have 4-digit CVV)
     return cleaned.slice(0, 4);
   };
 
   const handlePaymentFormChange = (e) => {
     const { name, value } = e.target;
-    
-    // Apply formatting based on field type
     let formattedValue = value;
-    
+
     if (name === 'cardNumber') {
       formattedValue = formatCardNumber(value);
     } else if (name === 'expiryDate') {
@@ -83,7 +112,7 @@ const StudentPayment = () => {
     } else if (name === 'cvv') {
       formattedValue = formatCVV(value);
     }
-    
+
     setPaymentForm({
       ...paymentForm,
       [name]: formattedValue
@@ -92,18 +121,16 @@ const StudentPayment = () => {
 
   const togglePaymentForm = () => {
     setIsPaying(!isPaying);
-    // Pre-fill the balance amount in the payment form
     setPaymentForm({
       ...paymentForm,
       amount: balance
     });
   };
 
-  const handlePayment = (e) => {
+  const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Basic validation
+
     if (!paymentForm.cardName || !paymentForm.cardNumber || 
         !paymentForm.expiryDate || !paymentForm.cvv) {
       showNotificationMessage("Please fill in all payment details", "error");
@@ -111,34 +138,43 @@ const StudentPayment = () => {
       return;
     }
 
-    // Validate card number (should be 16 digits + spaces)
     if (paymentForm.cardNumber.replace(/\s/g, '').length < 16) {
       showNotificationMessage("Please enter a valid card number", "error");
       setLoading(false);
       return;
     }
 
-    // Validate expiry date (should be MM/YY format)
     if (!/^\d{2}\/\d{2}$/.test(paymentForm.expiryDate)) {
       showNotificationMessage("Please enter a valid expiry date (MM/YY)", "error");
       setLoading(false);
       return;
     }
 
-    // Validate CVV (should be 3 or 4 digits)
     if (!/^\d{3,4}$/.test(paymentForm.cvv)) {
       showNotificationMessage("Please enter a valid CVV code", "error");
       setLoading(false);
       return;
     }
 
-    // For a simple demo, we'll simulate a successful payment
-    setTimeout(() => {
-      // Payment successful
-      setBalance(0);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8080/api/payments", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: paymentForm.amount
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Payment failed: ${response.status}`);
+      }
+
       showNotificationMessage(`Payment of $${paymentForm.amount.toFixed(2)} successful!`, "success");
-      
-      // Add to payment history
+
       const newPayment = {
         id: paymentHistory.length + 1,
         date: new Date().toISOString().split('T')[0],
@@ -146,8 +182,7 @@ const StudentPayment = () => {
         status: "Completed"
       };
       setPaymentHistory([newPayment, ...paymentHistory]);
-      
-      // Reset form and view
+
       setPaymentForm({
         cardName: "",
         cardNumber: "",
@@ -155,17 +190,29 @@ const StudentPayment = () => {
         cvv: "",
         amount: 0
       });
+
       setIsPaying(false);
+
+      // Re-fetch updated balance
+      const res = await fetch("http://localhost:8080/api/student/pending-dues", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      setBalance(data.pending_dues);
+    } catch (err) {
+      console.error("Payment error:", err);
+      showNotificationMessage("Payment failed. Please try again.", "error");
+    } finally {
       setLoading(false);
-    }, 1500); // Add a slight delay to simulate processing
+    }
   };
 
   const showNotificationMessage = (message, type) => {
     setNotificationMessage(message);
     setNotificationType(type);
     setShowNotification(true);
-    
-    // Auto hide notification after 5 seconds
     setTimeout(() => {
       setShowNotification(false);
     }, 5000);
@@ -173,7 +220,6 @@ const StudentPayment = () => {
 
   return (
     <div className="student-payment-container">
-      {/* Notification popup */}
       {showNotification && (
         <div className={`notification ${notificationType}`}>
           <p>{notificationMessage}</p>
@@ -182,23 +228,25 @@ const StudentPayment = () => {
       )}
 
       <h1 className="page-title">Student Payments</h1>
-      
-      {/* Balance Card */}
-      <Card>
-        <div className="balance-section">
-          <h2>Current Balance</h2>
-          <h3 className="balance-amount">${balance.toFixed(2)}</h3>
-          <button 
-            className="pay-now-button" 
-            onClick={togglePaymentForm}
-            disabled={balance <= 0}
-          >
-            {balance <= 0 ? 'No Balance Due' : 'Pay Now'}
-          </button>
-        </div>
-      </Card>
 
-      {/* Payment Form */}
+      {balance === null ? (
+        <p>Loading balance...</p>
+      ) : (
+        <Card>
+          <div className="balance-section">
+            <h2>Current Balance</h2>
+            <h3 className="balance-amount">${balance.toFixed(2)}</h3>
+            <button 
+              className="pay-now-button" 
+              onClick={togglePaymentForm}
+              disabled={balance <= 0}
+            >
+              {balance <= 0 ? 'No Balance Due' : 'Pay Now'}
+            </button>
+          </div>
+        </Card>
+      )}
+
       {isPaying && (
         <Card>
           <div className="payment-form-section">
@@ -218,7 +266,7 @@ const StudentPayment = () => {
                   required
                 />
               </div>
-              
+
               <div className="form-group">
                 <label htmlFor="cardName">Name on Card</label>
                 <input
@@ -230,7 +278,7 @@ const StudentPayment = () => {
                   required
                 />
               </div>
-              
+
               <div className="form-group">
                 <label htmlFor="cardNumber">Card Number</label>
                 <input
@@ -240,11 +288,11 @@ const StudentPayment = () => {
                   placeholder="XXXX XXXX XXXX XXXX"
                   value={paymentForm.cardNumber}
                   onChange={handlePaymentFormChange}
-                  maxLength={19} // 16 digits + 3 spaces
+                  maxLength={19}
                   required
                 />
               </div>
-              
+
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="expiryDate">Expiry Date</label>
@@ -255,11 +303,11 @@ const StudentPayment = () => {
                     placeholder="MM/YY"
                     value={paymentForm.expiryDate}
                     onChange={handlePaymentFormChange}
-                    maxLength={5} // MM/YY format
+                    maxLength={5}
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="cvv">CVV</label>
                   <input
@@ -269,12 +317,12 @@ const StudentPayment = () => {
                     placeholder="XXX"
                     value={paymentForm.cvv}
                     onChange={handlePaymentFormChange}
-                    maxLength={4} // Some cards have 4-digit CVV
+                    maxLength={4}
                     required
                   />
                 </div>
               </div>
-              
+
               <div className="form-buttons">
                 <button type="button" className="cancel-button" onClick={togglePaymentForm}>
                   Cancel
@@ -288,7 +336,6 @@ const StudentPayment = () => {
         </Card>
       )}
 
-      {/* Payment History */}
       <Card>
         <div className="payment-history-section">
           <h2>Payment History</h2>

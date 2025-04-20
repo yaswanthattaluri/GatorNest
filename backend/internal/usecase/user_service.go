@@ -12,7 +12,7 @@ type StudentService interface {
 	LoginUser(email, password string) (*entity.Student, error)
 	UpdateProfile(id uint, profileData entity.Student) error
 	GetFilteredStudents(gender, preference, foodPreference string) ([]entity.Student, error)
-
+	GetPendingDues(studentID uint) (float64, error)
 	SearchStudents(searchType, searchTerm string) ([]entity.Student, error)
 }
 
@@ -47,10 +47,7 @@ func (s *StudentServiceImpl) UpdateProfile(id uint, profileData entity.Student) 
 func (s *StudentServiceImpl) GetFilteredStudents(gender, preference, foodPreference string) ([]entity.Student, error) {
 	return s.repo.GetFilteredStudents(gender, preference, foodPreference)
 }
-func (m *MockStudentService) GetFilteredStudents(gender, preference, foodPreference string) ([]entity.Student, error) {
-	args := m.Called(gender, preference, foodPreference)
-	return args.Get(0).([]entity.Student), args.Error(1)
-}
+
 
 func (s *StudentServiceImpl) SearchStudents(searchType, searchTerm string) ([]entity.Student, error) {
 	switch searchType {
@@ -69,3 +66,11 @@ func (s *StudentServiceImpl) SearchStudents(searchType, searchTerm string) ([]en
 		return nil, errors.New("Invalid search type")
 	}
 }
+
+func (s *StudentServiceImpl) GetPendingDues(studentID uint) (float64, error) {
+	student, err := s.repo.GetStudentByID(studentID)
+	if err != nil {
+		return 0, err
+	}
+	return student.PendingDues, nil
+} 

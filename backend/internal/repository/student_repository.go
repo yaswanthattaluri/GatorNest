@@ -17,11 +17,14 @@ type StudentRepository interface {
 	UpdateStudentProfile(id uint, profileData *entity.Student) error
 	UpdateStudentRoom(id uint, roomID *uint) error
 	GetStudentByID(id uint) (*entity.Student, error)
+	UpdatePendingDues(id uint, amount float64) error
 
 	// Search methods
 	SearchStudentsByName(name string) ([]entity.Student, error)
 	SearchStudentsByID(studentID string) (*entity.Student, error)
 	SearchStudentsByRoomNumber(roomNumber string) ([]entity.Student, error)
+
+	GetByID(id uint) (*entity.Student, error)
 }
 
 type StudentRepositoryImpl struct {
@@ -116,4 +119,17 @@ func (r *StudentRepositoryImpl) SearchStudentsByRoomNumber(roomNumber string) ([
 	var students []entity.Student
 	err := r.db.Where("room_number = ?", roomNumber).Find(&students).Error
 	return students, err
+}
+
+func (r *StudentRepositoryImpl) GetByID(id uint) (*entity.Student, error) {
+	var student entity.Student
+	err := r.db.First(&student, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &student, nil
+}
+
+func (r *StudentRepositoryImpl) UpdatePendingDues(id uint, amount float64) error {
+	return r.db.Model(&entity.Student{}).Where("id = ?", id).Update("pending_dues", amount).Error
 }

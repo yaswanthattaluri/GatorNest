@@ -3,6 +3,7 @@ package config
 import (
 	"backend/internal/entity"
 	"fmt"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,21 +12,23 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	dsn := "host=localhost user=postgres password=1234 dbname=hosteldb port=5432 sslmode=disable"
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	var err error
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		dsn = "host=localhost user=postgres password=postgres dbname=gatornest port=5432 sslmode=disable"
+	}
 
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
 
-	DB = database
-
 	// Auto-migrate with new fields
-	err = DB.AutoMigrate(&entity.Student{}, &entity.Room{}, &entity.Admin{}, &entity.MaintenanceRequest{})
+	err = DB.AutoMigrate(&entity.Student{}, &entity.Room{}, &entity.Admin{}, &entity.MaintenanceRequest{}, &entity.Payment{})
 
 	if err != nil {
 		panic("Failed to migrate database!")
 	}
 
-	fmt.Println("Database connection successful!")
+	fmt.Println("Database connected successfully!")
 }

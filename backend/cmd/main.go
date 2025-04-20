@@ -7,6 +7,7 @@ import (
 	"backend/internal/repository"
 	"backend/internal/usecase"
 
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -32,12 +33,16 @@ func main() {
 	db := config.DB
 	studentRepo := repository.NewStudentRepository(db)
 	studentService := usecase.NewUserService(studentRepo)
-
+	paymentRepo := repository.NewPaymentRepository(config.DB)
 	studentHandler := delivery.NewUserHandler(studentService)
 
 	roomRepo := repository.NewRoomRepository(config.DB)
-	roomUsecase := usecase.NewRoomUsecase(roomRepo, studentRepo)
-	roomHandler := delivery.NewRoomHandler(roomUsecase)
+	roomService := usecase.NewRoomService(roomRepo, studentRepo, paymentRepo)
+	roomHandler := delivery.NewRoomHandler(roomService)
+
+	// Initialize payment components
+	paymentService := usecase.NewPaymentService(paymentRepo, studentRepo)
+	paymentHandler := delivery.NewPaymentHandler(paymentService)
 
 	// Public Routes
 	r.POST("/api/student/register", studentHandler.CreateUser)
@@ -52,20 +57,26 @@ func main() {
 	auth.GET("/get-all", studentHandler.GetUsers)
 	auth.PUT("/profile", studentHandler.UpdateProfile)
 	auth.GET("/students/filter", studentHandler.GetFilteredStudents)
+	auth.GET("/pending-dues", studentHandler.GetPendingDues)
 
 	// auth.POST("/rooms/:room_id/join", roomHandler.JoinRoom)
 
 	// Room Routes
 	roomRoutes := r.Group("/api/rooms")
+	{
+		// roomRoutes.GET("", roomHandler.GetRooms)
+		roomRoutes.GET("/number/:number", roomHandler.GetRoomByNumber)
+		roomRoutes.POST("", roomHandler.CreateRoom)
+		roomRoutes.DELETE("/number/:number", roomHandler.DeleteRoom)
+	}
 
-	// roomRoutes.GET("/", roomHandler.GetRooms)  // Correctly maps GET /api/rooms
-	roomRoutes.POST("/", roomHandler.CreateRoom)
-	roomRoutes.POST("/:room_id/join", roomHandler.JoinRoom)
-	roomRoutes.DELETE("/number/:room_number", roomHandler.DeleteRoom) // Corrected delete route
-
-	// Protected room routes (Admin Only)
-	// protectedRoomRoutes := roomRoutes.Group("/")
-	// protectedRoomRoutes.Use(middleware.AdminAuthMiddleware())
+	// Protected Room Routes
+	roomRoutes1 := r.Group("/api/rooms")
+	roomRoutes1.Use(middleware.JWTAuthMiddleware())
+	{
+		roomRoutes1.POST("/:id/join", roomHandler.JoinRoom)
+		roomRoutes1.GET("/type/:type", roomHandler.GetRoomsByType)
+	}
 
 	// Initialize repositories & usecases
 	adminRepo := repository.NewAdminRepository(db)
@@ -79,7 +90,7 @@ func main() {
 		adminRoutes.GET("/all", adminHandler.GetAllAdmins)
 	}
 
-	//maintenance routes
+	// Maintenance routes
 	maintenanceRepo := repository.NewMaintenanceRepository(config.DB)
 	maintenanceService := usecase.NewMaintenanceService(maintenanceRepo)
 	maintenanceHandler := delivery.NewMaintenanceHandler(maintenanceService)
@@ -92,5 +103,18 @@ func main() {
 		maintenance.PUT("/:id", maintenanceHandler.UpdateMaintenanceRequest)
 	}
 
-	r.Run(":8080")
+	// Payment routes
+	paymentRoutes := r.Group("/api/payments")
+	paymentRoutes.Use(middleware.JWTAuthMiddleware())
+	{
+		paymentRoutes.POST("", paymentHandler.MakePayment)
+		paymentRoutes.GET("/student/:studentId", paymentHandler.GetPaymentHistory)
+		paymentRoutes.PUT("/pending-dues", paymentHandler.UpdatePendingDues)
+	}
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	r.Run(":" + port)
 }

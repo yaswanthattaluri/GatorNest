@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte("secretKey123")
+var jwtSecret = []byte("secret")
 
 type AdminService interface {
 	RegisterAdmin(admin entity.Admin) error
