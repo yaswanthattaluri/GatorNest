@@ -64,8 +64,6 @@ func main() {
 	// Room Routes
 	roomRoutes := r.Group("/api/rooms")
 	{
-		// roomRoutes.GET("", roomHandler.GetRooms)
-		roomRoutes.GET("/number/:number", roomHandler.GetRoomByNumber)
 		roomRoutes.POST("", roomHandler.CreateRoom)
 		roomRoutes.DELETE("/number/:number", roomHandler.DeleteRoom)
 	}
@@ -74,6 +72,7 @@ func main() {
 	roomRoutes1 := r.Group("/api/rooms")
 	roomRoutes1.Use(middleware.JWTAuthMiddleware())
 	{
+		roomRoutes1.GET("/number/:number", roomHandler.GetRoomByNumber)
 		roomRoutes1.POST("/:id/join", roomHandler.JoinRoom)
 		roomRoutes1.GET("/type/:type", roomHandler.GetRoomsByType)
 	}
