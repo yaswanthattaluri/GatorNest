@@ -5,79 +5,57 @@ import "../styles/RoomFinder.css";
 
 const RoomFinder = () => {
   const [selectedFlat, setSelectedFlat] = useState(null);
-  const [roomData, setRoomData] = useState([]);
+  const [roomData, setRoomData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
 
   const flatTypes = ["1B1B", "2B2B", "3B3B"];
-  const columns = ["Room Number", "Dorm Number", "Students Enrolled", "Shared Rooms Available", "Price", "Actions"];
+  const columns = ["Room Number", "Type", "Students Enrolled", "Vacancy", "Price", "Actions"];
   
   // Admin email for inquiries
   const adminEmail = "admin@gatornest.com";
 
-  // Mock rooms data - you'll replace this with actual API data
-  const mockRooms = {
-    "1B1B": [
-      {
-        name: "Room A",
-        type: "Single",
-        roomNumber: 7075,
-        price: 1000,
-        vacancy: 10,
-        dormNumber: "1B1B",
-        studentsEnrolled: 3,
-        sharedRoomsAvailable: 7
-      },
-      {
-        name: "Room E",
-        type: "Triple",
-        roomNumber: 140,
-        price: 1000,
-        vacancy: 4,
-        dormNumber: "1B1B",
-        studentsEnrolled: 1,
-        sharedRoomsAvailable: 3
-      }
-    ],
-    "2B2B": [
-      {
-        name: "Room B",
-        type: "Double",
-        roomNumber: 1234,
-        price: 1000,
-        vacancy: 5,
-        dormNumber: "2B2B",
-        studentsEnrolled: 3,
-        sharedRoomsAvailable: 2
-      },
-      {
-        name: "Room D",
-        type: "Triple",
-        roomNumber: 130,
-        price: 1000,
-        vacancy: 2,
-        dormNumber: "2B2B",
-        studentsEnrolled: 1,
-        sharedRoomsAvailable: 1
-      }
-    ],
-    "3B3B": [
-      {
-        name: "Room C",
-        type: "Single",
-        roomNumber: 120,
-        price: 1000,
-        vacancy: 10,
-        dormNumber: "3B3B",
-        studentsEnrolled: 3,
-        sharedRoomsAvailable: 7
-      }
-    ]
-  };
-
   useEffect(() => {
+    const fetchRooms = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8080/api/rooms", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const rooms = await response.json();
+        
+        // Group rooms by type
+        const groupedRooms = rooms.reduce((acc, room) => {
+          const type = room.type;
+          if (!acc[type]) {
+            acc[type] = [];
+          }
+          acc[type].push(room);
+          return acc;
+        }, {});
+
+        setRoomData(groupedRooms);
+      } catch (err) {
+        console.error("Error fetching rooms:", err);
+        setError("Failed to fetch rooms");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     // Get user information from localStorage if available
     const token = localStorage.getItem("token");
     if (token) {
@@ -87,43 +65,84 @@ const RoomFinder = () => {
       setUserName("John Doe");
     }
 
-    // Load mock data for demonstration
-    setRoomData(mockRooms);
-    setLoading(false);
+    fetchRooms();
   }, []);
 
   // Handle expressing interest in a room
-  const handleExpressInterest = (room) => {
-    // Construct email subject and body
-    const subject = `Interest in Room ${room.roomNumber} (${room.dormNumber})`;
-    const body = `Hello,\n\nI am interested in Room ${room.roomNumber} in the ${room.dormNumber} dorm.\n\nPlease contact me for more information.\n\nThank you,\n${userName || "A Student"}`;
-    
-    // Create mailto link
-    const mailtoLink = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-  };
+  const handleExpressInterest = async (room) => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // First, get the room ID using the room number
+      const roomResponse = await fetch(`http://localhost:8080/api/rooms/number/${room.room_number}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-  // Format room data for the table
-  const formatRoomDataForTable = (rooms) => {
-    return rooms.map((room) => {
-      return {
-        "Room Number": room.roomNumber,
-        "Dorm Number": room.dormNumber,
-        "Students Enrolled": room.studentsEnrolled,
-        "Shared Rooms Available": room.sharedRoomsAvailable,
-        "Price": `$${room.price}`,
-        "Actions": (
-          <button 
-            className="interest-button" 
-            onClick={() => handleExpressInterest(room)}
-          >
-            I am Interested
-          </button>
-        )
-      };
-    });
+      if (!roomResponse.ok) {
+        throw new Error(`Failed to get room details: ${roomResponse.status}`);
+      }
+
+      const roomData = await roomResponse.json();
+      console.log("Room data:", roomData); // Debug log
+      
+      // Get the room ID, handling both ID and id cases
+      const roomId = roomData.ID || roomData.id;
+      if (!roomId) {
+        console.error("Invalid room data:", roomData);
+        throw new Error("Invalid room data received - no room ID found");
+      }
+      
+      // Then, join the room using the room ID
+      const joinResponse = await fetch(`http://localhost:8080/api/rooms/${roomId}/join`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!joinResponse.ok) {
+        const errorData = await joinResponse.json();
+        throw new Error(errorData.error || `Failed to join room: ${joinResponse.status}`);
+      }
+
+      // Show success message
+      alert("Successfully joined the room! The room price has been added to your pending dues.");
+      
+      // Refresh the room data to update the UI
+      const roomsResponse = await fetch("http://localhost:8080/api/rooms", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!roomsResponse.ok) {
+        throw new Error(`Failed to refresh rooms: ${roomsResponse.status}`);
+      }
+
+      const rooms = await roomsResponse.json();
+      
+      // Group rooms by type
+      const groupedRooms = rooms.reduce((acc, room) => {
+        const type = room.type;
+        if (!acc[type]) {
+          acc[type] = [];
+        }
+        acc[type].push(room);
+        return acc;
+      }, {});
+
+      setRoomData(groupedRooms);
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message || "Failed to join room. Please try again later.");
+    }
   };
 
   return (
@@ -140,6 +159,7 @@ const RoomFinder = () => {
           </Card>
         ))}
       </div>
+      
 
       {loading && <p>Loading rooms...</p>}
       {error && <p className="error">Error: {error}</p>}
@@ -147,7 +167,7 @@ const RoomFinder = () => {
       {selectedFlat && !loading && (
         <>
           <h2 className="subtitle">Room Details for {selectedFlat}</h2>
-          {mockRooms[selectedFlat] && mockRooms[selectedFlat].length > 0 ? (
+          {roomData[selectedFlat] && roomData[selectedFlat].length > 0 ? (
             <div className="table-container">
               <table className="room-table">
                 <thead>
@@ -158,12 +178,12 @@ const RoomFinder = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {mockRooms[selectedFlat].map((room) => (
-                    <tr key={room.roomNumber}>
-                      <td>{room.roomNumber}</td>
-                      <td>{room.dormNumber}</td>
-                      <td>{room.studentsEnrolled}</td>
-                      <td>{room.sharedRoomsAvailable}</td>
+                  {roomData[selectedFlat].map((room) => (
+                    <tr key={room.room_number}>
+                      <td>{room.room_number}</td>
+                      <td>{room.type}</td>
+                      <td>{room.students ? room.students.length : 0}</td>
+                      <td>{room.vacancy}</td>
                       <td>${room.price}</td>
                       <td>
                         <button 
