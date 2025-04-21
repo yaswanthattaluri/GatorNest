@@ -48,7 +48,6 @@ func (s *StudentServiceImpl) GetFilteredStudents(gender, preference, foodPrefere
 	return s.repo.GetFilteredStudents(gender, preference, foodPreference)
 }
 
-
 func (s *StudentServiceImpl) SearchStudents(searchType, searchTerm string) ([]entity.Student, error) {
 	switch searchType {
 	case "name":
@@ -73,4 +72,4 @@ func (s *StudentServiceImpl) GetPendingDues(studentID uint) (float64, error) {
 		return 0, err
 	}
 	return student.PendingDues, nil
-} 
+}

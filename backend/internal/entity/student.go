@@ -1,6 +1,11 @@
 package entity
 
-import "time"
+import (
+	"fmt"
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Preference string
 type Cleanliness string
@@ -49,4 +54,11 @@ type Student struct {
 	StudentID      string             `json:"student_id" gorm:"unique"`
 	PendingPayment float64            `json:"pending_payment" gorm:"default:1250.00"`
 	PendingDues    float64            `json:"pending_dues" gorm:"default:10"`
+}
+
+func (s *Student) BeforeCreate(tx *gorm.DB) (err error) {
+	if s.StudentID == "" {
+		s.StudentID = fmt.Sprintf("STU-%d", time.Now().UnixNano())
+	}
+	return
 }

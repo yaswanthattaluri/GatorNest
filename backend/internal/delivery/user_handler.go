@@ -3,6 +3,7 @@ package delivery
 import (
 	"backend/internal/entity"
 	"backend/internal/usecase"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -18,6 +19,10 @@ type StudentHandler struct {
 
 func NewUserHandler(service usecase.StudentService) *StudentHandler {
 	return &StudentHandler{service: service}
+}
+
+func generateStudentID() string {
+	return fmt.Sprintf("STU-%d", time.Now().UnixNano())
 }
 
 func (h *StudentHandler) CreateUser(c *gin.Context) {

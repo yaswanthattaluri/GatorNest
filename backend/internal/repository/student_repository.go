@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend/internal/entity"
+	// "fmt"
 	"log"
 
 	"gorm.io/gorm"
