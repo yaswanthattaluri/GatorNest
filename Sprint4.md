@@ -1,6 +1,6 @@
-Sprint 4 - GatorNest Hostel Management System
+# Sprint 4 - GatorNest Hostel Management System
 
-1. Summary of Work Completed
+## 1. Summary of Work Completed
 
 Backend Features
 - Integrated cloud-hosted PostgreSQL on Render for persistent storage
@@ -25,7 +25,7 @@ Frontend Features
   - ViewMaintenanceRequests.jsx: Admin dashboard to filter, edit, and resolve requests inline
   - FindRoommate.jsx: Now includes an "Interested" button that notifies the admin
 
-2. Backend Unit Tests
+## 2. Backend Unit Tests
 - maintenance_handler_test.go: Create, fetch, and update maintenance requests
 - payment_handler_test.go: Submit payment, fetch payment history
 - room_handler_test.go: Room lookup by number
@@ -38,7 +38,7 @@ Frontend Features
   - mock_maintenance_service.go
   - mock_payment_service.go
 
-3. Frontend Unit and Cypress Tests
+## 3. Frontend Unit and Cypress Tests
 
 Unit Tests:
 - Maintenance.test.jsx
@@ -86,7 +86,7 @@ Cypress End-to-End Tests:
   - Displays updated payment history with new transaction
   - Cancels the payment form and verifies its dismissal
 
-4. Deployment Summary
+## 4. Deployment Summary
 - Backend hosted on Render
   - Auto deploys on each commit to main
   - Connected to managed PostgreSQL DB
@@ -98,7 +98,7 @@ Live Deployment Links:
 - Frontend: https://gatornest.netlify.app
 - Backend: https://gatornest-backend.onrender.com
 
-5. Integration & Final Notes
+## 5. Integration & Final Notes
 - Fully integrated and deployed full-stack application
 - Verified API interactions via Postman and frontend
 - Real-time maintenance tracking system from student submission to admin resolution
