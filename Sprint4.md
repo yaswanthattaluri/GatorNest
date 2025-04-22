@@ -1,62 +1,94 @@
-# Sprint 4 Summary – GatorNest
+# Sprint 4 - GatorNest Hostel Management System
 
-## Backend Work Completed
+## 1. Summary of Work Completed
 
-- Integrated cloud-hosted PostgreSQL database on Render for persistent data storage
-- Updated backend connection logic in `database.go` to support environment variables for secure deployment
-- Added API endpoints:
-  - `POST /api/payments`: Record payment data
-  - `GET /api/payments/student/{student_id}`: Fetch all payments for a student
-  - `GET /api/rooms/number/{room_number}`: Retrieve room details by number
-  - Enhanced existing endpoints for admin, maintenance, student, and room modules
-- Implemented proper error handling and response formatting across endpoints
+### Backend Features
+- Integrated cloud-hosted PostgreSQL on Render for persistent storage
+- Updated backend configuration to load environment variables securely for deployment
+- Added new APIs:
+  - `POST /api/payments`: Record payments
+  - `GET /api/payments/student/{id}`: Retrieve payment history
+  - `GET /api/rooms/number/{room-number}`: Fetch room details
+  - `POST /api/maintenance-requests`: Submit maintenance complaints
+  - `PUT /api/maintenance-requests/{id}`: Update request with technician notes
+- Added email notification for interested room requests
 
-## Backend Unit Tests
+### Frontend Features
+- Implemented **Payments Page**:
+  - Students can submit payments
+  - Success notification and live status update in a table (Pending → Completed)
+- Implemented **Room Interest Button**:
+  - Clicking “Interested” sends an email to the admin about room interest
+- Completed **Maintenance System**:
+  - `Maintenance.jsx`: Students can submit detailed requests with all necessary fields
+  - `MaintenanceHistory.jsx`: Displays real-time updates on request status, notes, and completion
+  - `ViewMaintenanceRequests.jsx`: Admin dashboard to filter, edit, and resolve requests inline
+- `FindRoommate.jsx`: Now includes an “Interested” button that notifies the admin
 
-Unit tests were written using Go's testing framework. The following tests were added:
+## 2. Backend Unit Tests
+- `maintenance_handler_test.go`: Create, fetch, and update maintenance requests
+- `payment_handler_test.go`: Submit payment, fetch payment history
+- `room_handler_test.go`: Room lookup by number
+- All tests run using:
+  ```bash
+  go test ./internal/delivery -v
+  ```
+- Mocks used for isolation:
+  - `mock_maintenance_service.go`
+  - `mock_payment_service.go`
 
-- `maintenance_handler_test.go`:
-  - Tests for creating maintenance requests
-  - Retrieving all maintenance requests
-  - Updating maintenance requests (status, notes, date)
-
-- `payment_handler_test.go`:
-  - Tests for submitting payment details
-  - Retrieving payment history by student ID
-
-Mock services were created under `internal/usecase/mock/` to support isolated unit testing.
-
-## Frontend Unit and Integration Tests
-
-Unit tests were created for major frontend components using Jest and React Testing Library.
+## 3. Frontend Unit and Cypress Tests
 
 ### Unit Tests:
-- `RoomFinder.test.jsx`
-- `SearchStudent.test.jsx`
-- `StaffLogin.test.jsx`
-- `FindRoommate.test.jsx`
-- `ManageRooms.test.jsx`
 
-Each test verifies component rendering, form handling, conditional UI behavior, and API interaction logic.
+#### `Maintenance.test.jsx`
+- Verifies form renders on load
+- Toggles between form and request history
+- Tests form field population and submission
+- Checks dependent dropdown behavior (e.g., subcategory activation)
+- Confirms form resets after successful submit
+- Validates alerts for submission failure
+- Validates category options are correct
 
-### Cypress Testing:
-- Frontend supports integration testing with Cypress
-- Routing and protected component behavior validated via simulated UI flows
+#### `AdminMaintenancePanel.test.jsx`
+- Shows loading indicator on mount
+- Displays fetched maintenance request data
+- Filters by status (New, In Progress, Resolved)
+- Allows inline editing of technician notes
+- Saves updates with confirmation messages
+- Handles failed save with error alert
 
-## Deployment and Integration
+### Cypress End-to-End Tests
 
-### Backend:
-- Hosted on Render with automatic deployments from GitHub `main` branch
-- Render PostgreSQL database integrated and tested with live data
+#### `maintenance.cy.js` (Student Flow)
+- Mocks student login and token storage
+- Verifies maintenance form loading and submission
+- Intercepts and validates request payload
+- Confirms success alert on completion
 
-### Frontend:
-- Deployed on Netlify with SPA routing support
-- `_redirects` and `netlify.toml` configured to support client-side routing
-- Build and deploy integrated with GitHub repository
+#### `admin-maintenance.cy.js` (Admin Flow)
+- Mocks staff login and redirects to dashboard
+- Validates access to maintenance view panel
+- Intercepts GET requests for maintenance data
+- Checks display of request info and admin interaction
 
-## Final Notes
+## 4. Deployment Summary
+- Backend hosted on Render
+  - Auto deploys on each commit to `main`
+  - Connected to managed PostgreSQL DB
+- Frontend hosted on Netlify
+  - Auto deploys on each commit to `main`
+  - SPA routing handled using `_redirects` file
 
-- The backend and frontend are fully integrated and deployed
-- All API endpoints were tested using Postman and verified for correct data storage in the cloud database
+Live Deployment Links:
+- Frontend: https://gatornest.netlify.app
+- Backend: https://gatornest-backend.onrender.com
 
+## 5. Integration & Final Notes
+- Fully integrated and deployed full-stack application
+- Verified API interactions via Postman and frontend
+- Real-time maintenance tracking system from student submission to admin resolution
+- Payment workflows and room interest notifications are functional and validated
+- Unit and E2E test coverage ensures production stability and maintainability
+- Final Sprint demonstrates fully operational modules with backend security, responsive frontend, and persistent data in the cloud
 
